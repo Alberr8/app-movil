@@ -58,14 +58,37 @@ export default function OnboardingScreen() {
     await AsyncStorage.setItem('@sportstyle/favSports', JSON.stringify(selectedSports));
     await AsyncStorage.setItem('@sportstyle/favBrands', JSON.stringify(selectedBrands));
 
-    // Sync preferences to Supabase profile
     const { data } = await supabase.auth.getUser();
     if (data.user) {
-      supabase.from('profiles').upsert({
-        id: data.user.id,
-        fav_sports: selectedSports,
-        fav_brands: selectedBrands,
-      });
+      const uid = data.user.id;
+
+      // Resolve sport keys → sport ids
+      if (selectedSports.length > 0) {
+        const { data: sportRows } = await supabase
+          .from('sports')
+          .select('id, key')
+          .in('key', selectedSports);
+        if (sportRows && sportRows.length > 0) {
+          await supabase.from('user_sports').delete().eq('user_id', uid);
+          await supabase.from('user_sports').insert(
+            sportRows.map(s => ({ user_id: uid, sport_id: s.id }))
+          );
+        }
+      }
+
+      // Resolve brand keys → brand ids
+      if (selectedBrands.length > 0) {
+        const { data: brandRows } = await supabase
+          .from('brands')
+          .select('id, key')
+          .in('key', selectedBrands);
+        if (brandRows && brandRows.length > 0) {
+          await supabase.from('user_brands').delete().eq('user_id', uid);
+          await supabase.from('user_brands').insert(
+            brandRows.map(b => ({ user_id: uid, brand_id: b.id }))
+          );
+        }
+      }
     }
 
     nav.replace('Main');
