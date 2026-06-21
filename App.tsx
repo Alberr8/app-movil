@@ -23,12 +23,14 @@ import PremiumScreen from './src/screens/PremiumScreen';
 import WardrobeScreen from './src/screens/WardrobeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import AuthScreen from './src/screens/AuthScreen';
+import OnboardingScreen from './src/screens/OnboardingScreen';
 
 import { RootStackParamList, TabParamList } from './src/types';
 import { colors } from './src/constants/theme';
 import { scheduleDailyReminder, requestNotificationPermission } from './src/services/notifications';
 import { getLanguage, getNotificationsEnabled } from './src/services/storage';
 import { supabase } from './src/services/supabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -100,10 +102,12 @@ export default function App() {
   });
 
   const [session, setSession] = useState<Session | null | undefined>(undefined);
+  const [onboardingDone, setOnboardingDone] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+    AsyncStorage.getItem('@sportstyle/onboardingDone').then(v => setOnboardingDone(v === 'true'));
     return () => subscription.unsubscribe();
   }, []);
 
@@ -127,15 +131,19 @@ export default function App() {
     init();
   }, [session]);
 
-  // Wait for fonts and auth session check
-  if ((!fontsLoaded && !fontError) || session === undefined) return null;
+  // Wait for fonts, auth session and onboarding flag
+  if ((!fontsLoaded && !fontError) || session === undefined || onboardingDone === undefined) return null;
 
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         <StatusBar style="auto" />
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {session ? (
+          {!session ? (
+            <Stack.Screen name="Auth" component={AuthScreen} />
+          ) : !onboardingDone ? (
+            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+          ) : (
             <>
               <Stack.Screen name="Main" component={TabNavigator} />
               <Stack.Screen
@@ -144,8 +152,6 @@ export default function App() {
                 options={{ presentation: 'card', animation: 'slide_from_bottom' }}
               />
             </>
-          ) : (
-            <Stack.Screen name="Auth" component={AuthScreen} />
           )}
         </Stack.Navigator>
       </NavigationContainer>

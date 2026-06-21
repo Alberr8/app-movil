@@ -69,6 +69,7 @@ export interface UserProfile {
 
 export type RootStackParamList = {
   Auth: undefined;
+  Onboarding: undefined;
   Main: undefined;
   Score: {
     imageUri: string;
