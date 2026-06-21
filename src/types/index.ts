@@ -60,7 +60,15 @@ export interface Outfit {
   weekKey: string;
 }
 
+export interface UserProfile {
+  id: string;
+  name: string | null;
+  language: Language;
+  notifications_enabled: boolean;
+}
+
 export type RootStackParamList = {
+  Auth: undefined;
   Main: undefined;
   Score: {
     imageUri: string;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -15,17 +15,20 @@ import {
   Inter_800ExtraBold,
 } from '@expo-google-fonts/inter';
 import * as SplashScreen from 'expo-splash-screen';
+import type { Session } from '@supabase/supabase-js';
 
 import CameraScreen from './src/screens/CameraScreen';
 import ScoreScreen from './src/screens/ScoreScreen';
 import PremiumScreen from './src/screens/PremiumScreen';
 import WardrobeScreen from './src/screens/WardrobeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import AuthScreen from './src/screens/AuthScreen';
 
 import { RootStackParamList, TabParamList } from './src/types';
 import { colors } from './src/constants/theme';
 import { scheduleDailyReminder, requestNotificationPermission } from './src/services/notifications';
 import { getLanguage, getNotificationsEnabled } from './src/services/storage';
+import { supabase } from './src/services/supabase';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -96,11 +99,20 @@ export default function App() {
     Inter_800ExtraBold,
   });
 
+  const [session, setSession] = useState<Session | null | undefined>(undefined);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+    return () => subscription.unsubscribe();
+  }, []);
+
   useEffect(() => {
     if (fontsLoaded || fontError) SplashScreen.hideAsync();
   }, [fontsLoaded, fontError]);
 
   useEffect(() => {
+    if (!session) return;
     async function init() {
       if (Platform.OS === 'web') return;
       const enabled = await getNotificationsEnabled();
@@ -113,21 +125,28 @@ export default function App() {
       }
     }
     init();
-  }, []);
+  }, [session]);
 
-  if (!fontsLoaded && !fontError) return null;
+  // Wait for fonts and auth session check
+  if ((!fontsLoaded && !fontError) || session === undefined) return null;
 
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         <StatusBar style="auto" />
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Main" component={TabNavigator} />
-          <Stack.Screen
-            name="Score"
-            component={ScoreScreen}
-            options={{ presentation: 'card', animation: 'slide_from_bottom' }}
-          />
+          {session ? (
+            <>
+              <Stack.Screen name="Main" component={TabNavigator} />
+              <Stack.Screen
+                name="Score"
+                component={ScoreScreen}
+                options={{ presentation: 'card', animation: 'slide_from_bottom' }}
+              />
+            </>
+          ) : (
+            <Stack.Screen name="Auth" component={AuthScreen} />
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

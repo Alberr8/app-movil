@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Outfit, Language } from '../types';
+import { supabase } from './supabase';
 
 const KEYS = {
   outfits: '@sportstyle/outfits',
@@ -27,10 +28,28 @@ export function getWeekEnd(date: Date = new Date()): Date {
   return d;
 }
 
+// ─── Outfits ──────────────────────────────────────────────────────────────────
+// Write: cache first, then sync to Supabase in background
 export async function saveOutfit(outfit: Outfit): Promise<{ challengeCount: number; premiumUnlocked: boolean }> {
   const existing = await getOutfits();
   const updated = [outfit, ...existing];
   await AsyncStorage.setItem(KEYS.outfits, JSON.stringify(updated));
+
+  // Sync to Supabase in background (non-blocking)
+  supabase.auth.getUser().then(({ data }) => {
+    if (!data.user) return;
+    supabase.from('outfits').insert({
+      id: outfit.id,
+      user_id: data.user.id,
+      image_uri: outfit.imageUri,
+      exercise_type: outfit.exerciseType,
+      score: outfit.score,
+      week_key: outfit.weekKey,
+      created_at: outfit.createdAt,
+    }).then(({ error }) => {
+      if (error) console.warn('[storage] outfit sync failed:', error.message);
+    });
+  });
 
   const weekKey = getWeekKey();
   const weekHighScores = updated.filter(o => o.weekKey === weekKey && o.score.total >= 9);
@@ -46,16 +65,45 @@ export async function saveOutfit(outfit: Outfit): Promise<{ challengeCount: numb
   return { challengeCount: count, premiumUnlocked };
 }
 
+// Read: return cache immediately, refresh from Supabase in background
 export async function getOutfits(): Promise<Outfit[]> {
   const raw = await AsyncStorage.getItem(KEYS.outfits);
-  if (!raw) return [];
-  return JSON.parse(raw) as Outfit[];
+  const cached: Outfit[] = raw ? JSON.parse(raw) : [];
+
+  // Background refresh from Supabase
+  supabase.auth.getUser().then(({ data }) => {
+    if (!data.user) return;
+    supabase
+      .from('outfits')
+      .select('*')
+      .eq('user_id', data.user.id)
+      .order('created_at', { ascending: false })
+      .then(({ data: rows, error }) => {
+        if (error || !rows) return;
+        const remote: Outfit[] = rows.map(r => ({
+          id: r.id,
+          imageUri: r.image_uri,
+          exerciseType: r.exercise_type,
+          score: r.score,
+          createdAt: r.created_at,
+          weekKey: r.week_key,
+        }));
+        AsyncStorage.setItem(KEYS.outfits, JSON.stringify(remote));
+      });
+  });
+
+  return cached;
 }
 
 export async function deleteOutfit(id: string): Promise<void> {
   const existing = await getOutfits();
   const updated = existing.filter(o => o.id !== id);
   await AsyncStorage.setItem(KEYS.outfits, JSON.stringify(updated));
+
+  supabase.auth.getUser().then(({ data }) => {
+    if (!data.user) return;
+    supabase.from('outfits').delete().eq('id', id).eq('user_id', data.user.id);
+  });
 }
 
 export async function getWeeklyChallengeCount(): Promise<number> {
@@ -70,6 +118,14 @@ export async function isPremiumUnlocked(): Promise<boolean> {
   return new Date(until) > new Date();
 }
 
+// ─── Profile preferences ──────────────────────────────────────────────────────
+// Write to cache + sync profile row in Supabase
+async function syncProfile(patch: Record<string, unknown>) {
+  const { data } = await supabase.auth.getUser();
+  if (!data.user) return;
+  supabase.from('profiles').upsert({ id: data.user.id, ...patch });
+}
+
 export async function getLanguage(): Promise<Language> {
   const lang = await AsyncStorage.getItem(KEYS.language);
   return (lang as Language) ?? 'es';
@@ -77,6 +133,7 @@ export async function getLanguage(): Promise<Language> {
 
 export async function setLanguage(lang: Language): Promise<void> {
   await AsyncStorage.setItem(KEYS.language, lang);
+  syncProfile({ language: lang });
 }
 
 export async function getUserName(): Promise<string> {
@@ -85,6 +142,7 @@ export async function getUserName(): Promise<string> {
 
 export async function setUserName(name: string): Promise<void> {
   await AsyncStorage.setItem(KEYS.userName, name);
+  syncProfile({ name });
 }
 
 export async function getNotificationsEnabled(): Promise<boolean> {
@@ -94,6 +152,7 @@ export async function getNotificationsEnabled(): Promise<boolean> {
 
 export async function setNotificationsEnabled(enabled: boolean): Promise<void> {
   await AsyncStorage.setItem(KEYS.notificationsEnabled, String(enabled));
+  syncProfile({ notifications_enabled: enabled });
 }
 
 export async function getStats(): Promise<{ total: number; avg: number; best: number }> {
