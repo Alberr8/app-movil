@@ -2,11 +2,12 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, radius, shadow } from '../constants/theme';
-import { Outfit } from '../types';
+import { Outfit, Language } from '../types';
 import { SPORTS } from '../constants/i18n';
 
 interface Props {
   outfit: Outfit;
+  lang?: Language;
   onPress?: () => void;
 }
 
@@ -19,8 +20,9 @@ function ScoreBadge({ score }: { score: number }) {
   );
 }
 
-export default function OutfitCard({ outfit, onPress }: Props) {
+export default function OutfitCard({ outfit, lang = 'es', onPress }: Props) {
   const sport = SPORTS.find(s => s.key === outfit.exerciseType);
+  const locale = lang === 'en' ? 'en-US' : 'es-ES';
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.85} style={styles.card}>
       <Image source={{ uri: outfit.imageUri }} style={styles.image} resizeMode="cover" />
@@ -34,7 +36,7 @@ export default function OutfitCard({ outfit, onPress }: Props) {
           />
         )}
         <Text style={styles.date}>
-          {new Date(outfit.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+          {new Date(outfit.createdAt).toLocaleDateString(locale, { day: 'numeric', month: 'short' })}
         </Text>
       </View>
     </TouchableOpacity>
@@ -54,16 +56,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    minWidth: 38,
+    height: 38,
+    borderRadius: 19,
+    paddingHorizontal: 6,
     alignItems: 'center',
     justifyContent: 'center',
   },
   badgeText: {
     fontFamily: 'Inter_800ExtraBold',
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#000000',
   },
   footer: {
     flexDirection: 'row',

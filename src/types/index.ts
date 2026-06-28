@@ -49,6 +49,7 @@ export interface ScoreResult {
   basis: string;
   recommendations: string[];
   products: ProductRecommendation[];
+  coachingNudge?: string;
 }
 
 export interface Outfit {
@@ -58,6 +59,7 @@ export interface Outfit {
   score: ScoreResult;
   createdAt: string;
   weekKey: string;
+  wornDate?: string;  // YYYY-MM-DD local date the outfit was worn (defaults to createdAt date)
 }
 
 export interface UserProfile {
@@ -67,10 +69,12 @@ export interface UserProfile {
   notifications_enabled: boolean;
 }
 
+import type { NavigatorScreenParams } from '@react-navigation/native';
+
 export type RootStackParamList = {
   Auth: undefined;
   Onboarding: undefined;
-  Main: undefined;
+  Main: NavigatorScreenParams<TabParamList> | undefined;
   Score: {
     imageUri: string;
     exerciseType: ExerciseType;
@@ -79,8 +83,9 @@ export type RootStackParamList = {
 };
 
 export type TabParamList = {
-  Camera: undefined;
-  Premium: undefined;
   Wardrobe: undefined;
   Profile: undefined;
+  Camera: undefined;
+  Premium: undefined;
+  Stats: undefined;
 };

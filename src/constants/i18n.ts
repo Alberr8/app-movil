@@ -109,6 +109,11 @@ const strings = {
     profileLanguageEn: 'English',
     profileNotifications: 'Recordatorio diario 18:00',
     profileChallenge: 'Reto semanal',
+    profileWeeklyCoaching: 'Resumen semanal AI',
+    profileWeeklyCoachingBtn: 'Analizar mi semana',
+    profileWeeklyCoachingRefresh: 'Regenerar',
+    profileWeeklyCoachingLoading: 'Analizando tu semana...',
+    scoreCoachingNudge: 'Tu coach dice',
   },
   en: {
     tabHome: 'Home',
@@ -175,6 +180,11 @@ const strings = {
     profileLanguageEn: 'English',
     profileNotifications: 'Daily reminder 6 PM',
     profileChallenge: 'Weekly challenge',
+    profileWeeklyCoaching: 'Weekly AI Summary',
+    profileWeeklyCoachingBtn: 'Analyze my week',
+    profileWeeklyCoachingRefresh: 'Refresh',
+    profileWeeklyCoachingLoading: 'Analyzing your week...',
+    scoreCoachingNudge: 'Your coach says',
   },
 } as const;
 

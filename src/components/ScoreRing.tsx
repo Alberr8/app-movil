@@ -36,11 +36,6 @@ export default function ScoreRing({ score, size = 160 }: Props) {
     }).start();
   }, [score]);
 
-  const strokeDashoffset = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [circumference, 0],
-  });
-
   // On web, use a simple animated circle via CSS-style approach
   if (Platform.OS === 'web') {
     return <WebScoreRing score={score} size={size} color={scoreColor} />;

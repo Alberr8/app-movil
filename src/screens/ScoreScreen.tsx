@@ -1,15 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
   View, Text, StyleSheet, Image, ScrollView, TouchableOpacity,
-  SafeAreaView, Animated, Platform, Linking,
+  SafeAreaView, Animated, Platform, Linking, FlatList,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, spacing, radius, shadow } from '../constants/theme';
 import { t } from '../constants/i18n';
 import { RootStackParamList, Language, Outfit, ProductRecommendation } from '../types';
+
+type Nav = NativeStackNavigationProp<RootStackParamList, 'Score'>;
 import { getLanguage, saveOutfit, getWeekKey } from '../services/storage';
 import ScoreRing from '../components/ScoreRing';
 import ShareSheet from '../components/ShareSheet';
@@ -50,13 +53,31 @@ function ProductCard({ product, lang }: { product: ProductRecommendation; lang: 
   );
 }
 
+function localISODate(daysBack = 0): string {
+  const d = new Date();
+  d.setDate(d.getDate() - daysBack);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function formatDateChip(iso: string, lang: Language): string {
+  if (iso === localISODate(0)) return lang === 'es' ? 'Hoy' : 'Today';
+  if (iso === localISODate(1)) return lang === 'es' ? 'Ayer' : 'Yesterday';
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {
+    weekday: 'short', day: 'numeric', month: 'short',
+  });
+}
+
+const RECENT_DATES = Array.from({ length: 8 }, (_, i) => localISODate(i));
+
 export default function ScoreScreen() {
-  const nav = useNavigation();
+  const nav = useNavigation<Nav>();
   const route = useRoute<Route>();
   const { imageUri, exerciseType, result } = route.params;
 
   const [lang, setLang] = useState<Language>('es');
   const [saved, setSaved] = useState(false);
+  const [wornDate, setWornDate] = useState(localISODate(0));
   const [toast, setToast] = useState<string | null>(null);
   const toastAnim = useRef(new Animated.Value(0)).current;
   const barAnims = useRef(BREAKDOWN_FIELDS.map(() => new Animated.Value(0))).current;
@@ -97,6 +118,7 @@ export default function ScoreScreen() {
       score: result,
       createdAt: new Date().toISOString(),
       weekKey: getWeekKey(),
+      wornDate,
     };
     const { challengeCount, premiumUnlocked } = await saveOutfit(outfit);
     setSaved(true);
@@ -109,7 +131,8 @@ export default function ScoreScreen() {
     } else {
       showToast(t('scoreSaved', lang) as string);
     }
-    setTimeout(() => nav.goBack(), 2800);
+    // Navigate to Wardrobe so the user sees the outfit they just saved
+    setTimeout(() => nav.navigate('Main', { screen: 'Wardrobe' }), 1200);
   }
 
   const scoreColor = result.total >= 8 ? colors.scoreHigh : result.total >= 5 ? colors.scoreMid : colors.scoreLow;
@@ -141,6 +164,17 @@ export default function ScoreScreen() {
 
           {/* Basis */}
           <Text style={styles.basis}>{result.basis}</Text>
+
+          {/* AI Coaching nudge */}
+          {result.coachingNudge && (
+            <View style={styles.nudgeCard}>
+              <View style={styles.nudgeHeader}>
+                <Ionicons name="flash" size={14} color={colors.accentBlue} />
+                <Text style={styles.nudgeLabel}>{t('scoreCoachingNudge', lang)}</Text>
+              </View>
+              <Text style={styles.nudgeText}>{result.coachingNudge}</Text>
+            </View>
+          )}
 
           {/* Breakdown bars */}
           <View style={styles.card}>
@@ -180,6 +214,33 @@ export default function ScoreScreen() {
 
           {/* Share */}
           <ShareSheet score={result.total} imageUri={imageUri} lang={lang} />
+
+          {/* Date selector */}
+          {!saved && (
+            <View style={styles.dateSection}>
+              <Text style={styles.dateSectionLabel}>
+                {lang === 'es' ? '¿Cuándo lo llevaste?' : 'When did you wear it?'}
+              </Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.dateScrollContent}
+              >
+                {RECENT_DATES.map(date => (
+                  <TouchableOpacity
+                    key={date}
+                    onPress={() => setWornDate(date)}
+                    style={[styles.dateChip, wornDate === date && styles.dateChipActive]}
+                    activeOpacity={0.75}
+                  >
+                    <Text style={[styles.dateChipText, wornDate === date && styles.dateChipTextActive]}>
+                      {formatDateChip(date, lang)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
 
           {/* Save */}
           <TouchableOpacity
@@ -312,7 +373,7 @@ const styles = StyleSheet.create({
   productTagText: {
     fontFamily: 'Inter_600SemiBold',
     fontSize: 10,
-    color: '#FFFFFF',
+    color: '#000000',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -339,6 +400,35 @@ const styles = StyleSheet.create({
     color: colors.accentBlue,
   },
 
+  // ── Coaching nudge ──
+  nudgeCard: {
+    backgroundColor: 'rgba(101,195,1,0.14)',
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    marginBottom: spacing.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(101,195,1,0.32)',
+  },
+  nudgeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: spacing.sm,
+  },
+  nudgeLabel: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 11,
+    color: colors.accentBlue,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  nudgeText: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.92)',
+    lineHeight: 21,
+  },
+
   // ── Bottom ──
   saveBtn: {
     backgroundColor: colors.accentBlue,
@@ -352,7 +442,7 @@ const styles = StyleSheet.create({
   saveBtnText: {
     fontFamily: 'Inter_600SemiBold',
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#000000',
   },
   toast: {
     position: 'absolute',
@@ -368,5 +458,42 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_600SemiBold',
     fontSize: 14,
     color: '#FFFFFF',
+  },
+
+  // ── Date selector ──
+  dateSection: {
+    marginTop: spacing.md,
+    marginBottom: spacing.sm,
+  },
+  dateSectionLabel: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.65)',
+    marginBottom: spacing.sm,
+  },
+  dateScrollContent: {
+    gap: spacing.sm,
+    paddingBottom: 2,
+  },
+  dateChip: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: radius.full,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.10)',
+  },
+  dateChipActive: {
+    backgroundColor: colors.accentBlue,
+    borderColor: 'transparent',
+  },
+  dateChipText: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.75)',
+  },
+  dateChipTextActive: {
+    fontFamily: 'Inter_700Bold',
+    color: '#000000',
   },
 });

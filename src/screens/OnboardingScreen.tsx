@@ -54,41 +54,45 @@ export default function OnboardingScreen() {
   }
 
   async function handleFinish() {
+    // Always save locally first — navigation must succeed regardless of Supabase
     await AsyncStorage.setItem('@sportstyle/onboardingDone', 'true');
     await AsyncStorage.setItem('@sportstyle/favSports', JSON.stringify(selectedSports));
     await AsyncStorage.setItem('@sportstyle/favBrands', JSON.stringify(selectedBrands));
 
-    const { data } = await supabase.auth.getUser();
-    if (data.user) {
-      const uid = data.user.id;
+    // Sync to Supabase in background — errors here must never block navigation
+    try {
+      const { data } = await supabase.auth.getUser();
+      if (data.user) {
+        const uid = data.user.id;
 
-      // Resolve sport keys → sport ids
-      if (selectedSports.length > 0) {
-        const { data: sportRows } = await supabase
-          .from('sports')
-          .select('id, key')
-          .in('key', selectedSports);
-        if (sportRows && sportRows.length > 0) {
-          await supabase.from('user_sports').delete().eq('user_id', uid);
-          await supabase.from('user_sports').insert(
-            sportRows.map(s => ({ user_id: uid, sport_id: s.id }))
-          );
+        if (selectedSports.length > 0) {
+          const { data: sportRows } = await supabase
+            .from('sports')
+            .select('id, key')
+            .in('key', selectedSports);
+          if (sportRows && sportRows.length > 0) {
+            await supabase.from('user_sports').delete().eq('user_id', uid);
+            await supabase.from('user_sports').insert(
+              sportRows.map(s => ({ user_id: uid, sport_id: s.id }))
+            );
+          }
+        }
+
+        if (selectedBrands.length > 0) {
+          const { data: brandRows } = await supabase
+            .from('brands')
+            .select('id, key')
+            .in('key', selectedBrands);
+          if (brandRows && brandRows.length > 0) {
+            await supabase.from('user_brands').delete().eq('user_id', uid);
+            await supabase.from('user_brands').insert(
+              brandRows.map(b => ({ user_id: uid, brand_id: b.id }))
+            );
+          }
         }
       }
-
-      // Resolve brand keys → brand ids
-      if (selectedBrands.length > 0) {
-        const { data: brandRows } = await supabase
-          .from('brands')
-          .select('id, key')
-          .in('key', selectedBrands);
-        if (brandRows && brandRows.length > 0) {
-          await supabase.from('user_brands').delete().eq('user_id', uid);
-          await supabase.from('user_brands').insert(
-            brandRows.map(b => ({ user_id: uid, brand_id: b.id }))
-          );
-        }
-      }
+    } catch (e) {
+      console.warn('[onboarding] Supabase sync failed (non-blocking):', e);
     }
 
     nav.replace('Main');
@@ -115,7 +119,7 @@ export default function OnboardingScreen() {
             ].map((f, i) => (
               <View key={i} style={styles.featureRow}>
                 <View style={styles.featureIconWrap}>
-                  <Ionicons name={f.icon as any} size={22} color={colors.accentBlue} />
+                  <Ionicons name={f.icon as any} size={22} color={colors.accentDark} />
                 </View>
                 <Text style={styles.featureRowText}>{f.text}</Text>
               </View>
@@ -270,7 +274,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: radius.sm,
-    backgroundColor: colors.background,
+    backgroundColor: 'rgba(181,253,89,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
   },

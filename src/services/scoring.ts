@@ -1,5 +1,7 @@
+import { Platform } from 'react-native';
+import * as FileSystem from 'expo-file-system';
 import { ExerciseType, Language, ScoreBreakdown, ScoreResult, ProductRecommendation } from '../types';
-import { t } from '../constants/i18n';
+import { supabase } from './supabase';
 
 // ─── Sport category grouping ──────────────────────────────────────────────────
 type SportCategory = 'endurance' | 'strength' | 'court' | 'team' | 'outdoor' | 'mind_body';
@@ -396,23 +398,80 @@ const BASIS: Record<SportCategory, Record<Language, string>> = {
   },
 };
 
-// ─── Public API ───────────────────────────────────────────────────────────────
-export async function scoreOutfit(
-  _imageUri: string,
+// ─── Image → base64 helper ────────────────────────────────────────────────────
+async function getImageBase64(uri: string): Promise<{ base64: string; mimeType: string }> {
+  if (uri.startsWith('data:')) {
+    const [header, base64] = uri.split(',');
+    const mimeType = header.match(/:(.*?);/)?.[1] ?? 'image/jpeg';
+    return { base64, mimeType };
+  }
+  if (Platform.OS === 'web') {
+    const res = await fetch(uri);
+    const blob = await res.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result as string;
+        const [header, base64] = dataUrl.split(',');
+        const mimeType = header.match(/:(.*?);/)?.[1] ?? 'image/jpeg';
+        resolve({ base64, mimeType });
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+  const base64 = await FileSystem.readAsStringAsync(uri, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+  return { base64, mimeType: 'image/jpeg' };
+}
+
+// ─── AI scoring via Edge Function ────────────────────────────────────────────
+async function scoreOutfitWithAI(
+  imageUri: string,
   exerciseType: ExerciseType,
   lang: Language,
 ): Promise<ScoreResult> {
-  await new Promise(resolve => setTimeout(resolve, 2200));
-
-  const total = weightedRandom();
-  const breakdown = distributeScore(total);
+  const { base64, mimeType } = await getImageBase64(imageUri);
   const category = getSportCategory(exerciseType);
 
+  const { data, error } = await supabase.functions.invoke('score-outfit', {
+    body: { imageBase64: base64, mimeType, exerciseType, lang },
+  });
+
+  if (error) throw error;
+  if (data.error) throw new Error(data.error);
+
   return {
-    total,
-    breakdown,
+    total: data.total,
+    breakdown: data.breakdown,
     basis: BASIS[category][lang],
-    recommendations: pickRecs(category, lang, total),
+    recommendations: data.recommendations,
     products: pickProducts(category, lang, 3),
+    coachingNudge: data.coachingNudge,
   };
+}
+
+// ─── Public API ───────────────────────────────────────────────────────────────
+export async function scoreOutfit(
+  imageUri: string,
+  exerciseType: ExerciseType,
+  lang: Language,
+): Promise<ScoreResult> {
+  try {
+    return await scoreOutfitWithAI(imageUri, exerciseType, lang);
+  } catch {
+    // Fallback to local random scoring when Edge Function is unavailable
+    await new Promise(resolve => setTimeout(resolve, 2200));
+    const total = weightedRandom();
+    const breakdown = distributeScore(total);
+    const category = getSportCategory(exerciseType);
+    return {
+      total,
+      breakdown,
+      basis: BASIS[category][lang],
+      recommendations: pickRecs(category, lang, total),
+      products: pickProducts(category, lang, 3),
+    };
+  }
 }

@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import {
   View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity,
-  TextInput, Switch, Platform,
+  TextInput, Switch, Platform, ActivityIndicator,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { colors, spacing, radius, shadow } from '../constants/theme';
 import { t } from '../constants/i18n';
@@ -11,6 +12,7 @@ import {
   getLanguage, setLanguage, getUserName, setUserName,
   getNotificationsEnabled, setNotificationsEnabled,
   getStats, getWeeklyChallengeCount, isPremiumUnlocked,
+  getWeeklyCoachingSummary,
 } from '../services/storage';
 import { scheduleDailyReminder, cancelDailyReminder, requestNotificationPermission } from '../services/notifications';
 import ChallengeBar from '../components/ChallengeBar';
@@ -22,6 +24,9 @@ export default function ProfileScreen() {
   const [stats, setStats] = useState({ total: 0, avg: 0, best: 0 });
   const [challengeCount, setChallengeCount] = useState(0);
   const [premiumUnlocked, setPremiumUnlocked] = useState(false);
+  const [coachingSummary, setCoachingSummary] = useState<string | null>(null);
+  const [coachingLoading, setCoachingLoading] = useState(false);
+  const [coachingError, setCoachingError] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -34,6 +39,19 @@ export default function ProfileScreen() {
       });
     }, []),
   );
+
+  async function handleGenerateSummary() {
+    setCoachingLoading(true);
+    setCoachingError(false);
+    try {
+      const summary = await getWeeklyCoachingSummary(lang, name);
+      setCoachingSummary(summary);
+    } catch {
+      setCoachingError(true);
+    } finally {
+      setCoachingLoading(false);
+    }
+  }
 
   async function handleLangChange(newLang: Language) {
     setLang(newLang);
@@ -92,6 +110,49 @@ export default function ProfileScreen() {
           ))}
         </View>
 
+        {/* Weekly AI coaching */}
+        <Text style={styles.sectionLabel}>{t('profileWeeklyCoaching', lang)}</Text>
+        <View style={styles.coachingCard}>
+          {coachingLoading ? (
+            <View style={styles.coachingLoading}>
+              <ActivityIndicator color={colors.accentDark} size="small" />
+              <Text style={styles.coachingLoadingText}>{t('profileWeeklyCoachingLoading', lang)}</Text>
+            </View>
+          ) : coachingSummary ? (
+            <>
+              <View style={styles.coachingNudgeHeader}>
+                <Ionicons name="flash" size={14} color={colors.accentDark} />
+                <Text style={styles.coachingNudgeLabel}>{t('profileWeeklyCoaching', lang)}</Text>
+              </View>
+              <Text style={styles.coachingSummaryText}>{coachingSummary}</Text>
+              <TouchableOpacity
+                onPress={handleGenerateSummary}
+                style={styles.coachingRefreshBtn}
+                activeOpacity={0.75}
+              >
+                <Ionicons name="refresh" size={14} color={colors.accentDark} />
+                <Text style={styles.coachingRefreshText}>{t('profileWeeklyCoachingRefresh', lang)}</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              {coachingError && (
+                <Text style={styles.coachingErrorText}>
+                  {lang === 'es' ? 'Error al conectar. Inténtalo de nuevo.' : 'Connection error. Please try again.'}
+                </Text>
+              )}
+              <TouchableOpacity
+                onPress={handleGenerateSummary}
+                style={styles.coachingBtn}
+                activeOpacity={0.85}
+              >
+                <Ionicons name="flash-outline" size={16} color="#000000" />
+                <Text style={styles.coachingBtnText}>{t('profileWeeklyCoachingBtn', lang)}</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+
         {/* Language */}
         <Text style={styles.sectionLabel}>{t('profileLanguage', lang)}</Text>
         <View style={styles.card}>
@@ -148,7 +209,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: spacing.sm,
   },
-  avatarText: { fontFamily: 'Inter_700Bold', fontSize: 24, color: '#FFFFFF' },
+  avatarText: { fontFamily: 'Inter_700Bold', fontSize: 24, color: '#000000' },
   nameInput: {
     fontFamily: 'Inter_600SemiBold',
     fontSize: 17,
@@ -187,7 +248,78 @@ const styles = StyleSheet.create({
   },
   langBtnActive: { backgroundColor: colors.accent },
   langBtnText: { fontFamily: 'Inter_600SemiBold', fontSize: 14, color: colors.textSecondary },
-  langBtnTextActive: { color: '#FFFFFF' },
+  langBtnTextActive: { color: '#000000' },
   notifRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   notifText: { fontFamily: 'Inter_400Regular', fontSize: 15, color: colors.textPrimary, flex: 1 },
+
+  // ── Weekly coaching ──
+  coachingCard: {
+    backgroundColor: colors.card,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+    ...shadow.sm,
+  },
+  coachingLoading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    paddingVertical: spacing.sm,
+  },
+  coachingLoadingText: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 14,
+    color: colors.textSecondary,
+  },
+  coachingNudgeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: spacing.sm,
+  },
+  coachingNudgeLabel: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 11,
+    color: colors.accentDark,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  coachingSummaryText: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 14,
+    color: colors.textPrimary,
+    lineHeight: 22,
+    marginBottom: spacing.md,
+  },
+  coachingRefreshBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    alignSelf: 'flex-start',
+  },
+  coachingRefreshText: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 13,
+    color: colors.accentDark,
+  },
+  coachingErrorText: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    color: colors.scoreLow,
+    marginBottom: spacing.sm,
+  },
+  coachingBtn: {
+    backgroundColor: colors.accent,
+    borderRadius: radius.md,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
+  },
+  coachingBtnText: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 15,
+    color: '#000000',
+  },
 });

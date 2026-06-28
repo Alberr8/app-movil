@@ -29,9 +29,11 @@ export function getWeekEnd(date: Date = new Date()): Date {
 }
 
 // ─── Outfits ──────────────────────────────────────────────────────────────────
-// Write: cache first, then sync to Supabase in background
+// Write: read cache directly (bypassing background Supabase fetch to avoid race condition),
+// prepend new outfit, then sync to Supabase in background.
 export async function saveOutfit(outfit: Outfit): Promise<{ challengeCount: number; premiumUnlocked: boolean }> {
-  const existing = await getOutfits();
+  const raw = await AsyncStorage.getItem(KEYS.outfits);
+  const existing: Outfit[] = raw ? JSON.parse(raw) : [];
   const updated = [outfit, ...existing];
   await AsyncStorage.setItem(KEYS.outfits, JSON.stringify(updated));
 
@@ -46,6 +48,7 @@ export async function saveOutfit(outfit: Outfit): Promise<{ challengeCount: numb
       score: outfit.score,
       week_key: outfit.weekKey,
       created_at: outfit.createdAt,
+      worn_date: outfit.wornDate ?? null,
     }).then(({ error }) => {
       if (error) console.warn('[storage] outfit sync failed:', error.message);
     });
@@ -87,6 +90,7 @@ export async function getOutfits(): Promise<Outfit[]> {
           score: r.score,
           createdAt: r.created_at,
           weekKey: r.week_key,
+          wornDate: r.worn_date ?? undefined,
         }));
         AsyncStorage.setItem(KEYS.outfits, JSON.stringify(remote));
       });
@@ -162,4 +166,21 @@ export async function getStats(): Promise<{ total: number; avg: number; best: nu
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
   const best = Math.max(...scores);
   return { total: outfits.length, avg: Math.round(avg * 10) / 10, best };
+}
+
+// ─── AI weekly coaching summary ───────────────────────────────────────────────
+export async function getWeeklyCoachingSummary(lang: Language, userName: string): Promise<string> {
+  const outfits = await getOutfits();
+  const weekKey = getWeekKey();
+  const weekOutfits = outfits
+    .filter(o => o.weekKey === weekKey)
+    .map(o => ({ exerciseType: o.exerciseType, score: o.score }));
+
+  const { data, error } = await supabase.functions.invoke('weekly-coaching', {
+    body: { lang, weekOutfits, userName },
+  });
+
+  if (error) throw error;
+  if (data.error) throw new Error(data.error);
+  return data.summary as string;
 }
