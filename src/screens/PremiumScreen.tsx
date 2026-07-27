@@ -133,7 +133,7 @@ export default function PremiumScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
   scroll: { padding: spacing.md, paddingBottom: spacing.xxl },
-  title: { fontFamily: 'Inter_700Bold', fontSize: 34, color: colors.textPrimary, marginBottom: spacing.md },
+  title: { fontFamily: 'DMSans_700Bold', fontSize: 34, color: colors.textPrimary, marginBottom: spacing.md },
   unlockedBanner: {
     backgroundColor: colors.premium,
     borderRadius: radius.lg,
@@ -141,9 +141,9 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
     alignItems: 'center',
   },
-  unlockedText: { fontFamily: 'Inter_700Bold', fontSize: 15, color: '#000' },
+  unlockedText: { fontFamily: 'DMSans_700Bold', fontSize: 15, color: '#000' },
   section: { marginBottom: spacing.lg },
-  sectionTitle: { fontFamily: 'Inter_700Bold', fontSize: 18, color: colors.textPrimary, marginBottom: spacing.sm },
+  sectionTitle: { fontFamily: 'DMSans_700Bold', fontSize: 18, color: colors.textPrimary, marginBottom: spacing.sm },
   cardWrapper: { marginBottom: spacing.sm, borderRadius: radius.lg, overflow: 'hidden' },
   card: {
     flexDirection: 'row',
@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     minHeight: 64,
   },
   cardContent: { flex: 1 },
-  cardTitle: { fontFamily: 'Inter_600SemiBold', fontSize: 15, color: '#FFFFFF' },
-  cardSub: { fontFamily: 'Inter_400Regular', fontSize: 12, color: 'rgba(255,255,255,0.65)', marginTop: 2 },
+  cardTitle: { fontFamily: 'DMSans_600SemiBold', fontSize: 15, color: '#FFFFFF' },
+  cardSub: { fontFamily: 'DMSans_400Regular', fontSize: 12, color: 'rgba(255,255,255,0.65)', marginTop: 2 },
   webBlur: {
     backgroundColor: 'rgba(0,0,0,0.48)',
     alignItems: 'center',
@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
     ...shadow.md,
     marginTop: spacing.md,
   },
-  ctaTitle: { fontFamily: 'Inter_700Bold', fontSize: 20, color: colors.textPrimary, marginBottom: spacing.sm },
-  ctaSub: { fontFamily: 'Inter_400Regular', fontSize: 14, color: colors.textSecondary, textAlign: 'center', marginBottom: spacing.lg, lineHeight: 20 },
+  ctaTitle: { fontFamily: 'DMSans_700Bold', fontSize: 20, color: colors.textPrimary, marginBottom: spacing.sm },
+  ctaSub: { fontFamily: 'DMSans_400Regular', fontSize: 14, color: colors.textSecondary, textAlign: 'center', marginBottom: spacing.lg, lineHeight: 20 },
   ctaBtn: { borderRadius: radius.md, paddingVertical: 14, paddingHorizontal: spacing.xl },
-  ctaBtnText: { fontFamily: 'Inter_700Bold', fontSize: 16, color: '#000' },
+  ctaBtnText: { fontFamily: 'DMSans_700Bold', fontSize: 16, color: '#000' },
 });

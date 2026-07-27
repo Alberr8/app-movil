@@ -68,12 +68,13 @@ export async function saveOutfit(outfit: Outfit): Promise<{ challengeCount: numb
   return { challengeCount: count, premiumUnlocked };
 }
 
-// Read: return cache immediately, refresh from Supabase in background
+// Read: return cache immediately, refresh from Supabase in background.
+// MERGE strategy: keep any locally-saved outfits not yet confirmed in Supabase
+// to prevent the background sync from overwriting outfits saved moments ago.
 export async function getOutfits(): Promise<Outfit[]> {
   const raw = await AsyncStorage.getItem(KEYS.outfits);
   const cached: Outfit[] = raw ? JSON.parse(raw) : [];
 
-  // Background refresh from Supabase
   supabase.auth.getUser().then(({ data }) => {
     if (!data.user) return;
     supabase
@@ -81,7 +82,7 @@ export async function getOutfits(): Promise<Outfit[]> {
       .select('*')
       .eq('user_id', data.user.id)
       .order('created_at', { ascending: false })
-      .then(({ data: rows, error }) => {
+      .then(async ({ data: rows, error }) => {
         if (error || !rows) return;
         const remote: Outfit[] = rows.map(r => ({
           id: r.id,
@@ -92,7 +93,16 @@ export async function getOutfits(): Promise<Outfit[]> {
           weekKey: r.week_key,
           wornDate: r.worn_date ?? undefined,
         }));
-        AsyncStorage.setItem(KEYS.outfits, JSON.stringify(remote));
+        // Re-read current local state to pick up any outfits saved after this
+        // function was called (avoids race with saveOutfit)
+        const currentRaw = await AsyncStorage.getItem(KEYS.outfits);
+        const current: Outfit[] = currentRaw ? JSON.parse(currentRaw) : [];
+        const remoteIds = new Set(remote.map(o => o.id));
+        const unsynced = current.filter(o => !remoteIds.has(o.id));
+        const merged = [...remote, ...unsynced].sort(
+          (a, b) => b.createdAt.localeCompare(a.createdAt),
+        );
+        AsyncStorage.setItem(KEYS.outfits, JSON.stringify(merged));
       });
   });
 
@@ -100,7 +110,8 @@ export async function getOutfits(): Promise<Outfit[]> {
 }
 
 export async function deleteOutfit(id: string): Promise<void> {
-  const existing = await getOutfits();
+  const raw = await AsyncStorage.getItem(KEYS.outfits);
+  const existing: Outfit[] = raw ? JSON.parse(raw) : [];
   const updated = existing.filter(o => o.id !== id);
   await AsyncStorage.setItem(KEYS.outfits, JSON.stringify(updated));
 

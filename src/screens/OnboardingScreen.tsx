@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   hero: { paddingTop: spacing.xl, paddingBottom: spacing.xl },
   tagline: {
     fontSize: 44,
-    fontFamily: 'Inter_800ExtraBold',
+    fontFamily: 'CormorantGaramond_600SemiBold',
     color: colors.textPrimary,
     lineHeight: 50,
     letterSpacing: -1,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   },
   taglineSub: {
     fontSize: 16,
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     color: colors.textSecondary,
     lineHeight: 24,
   },
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   },
   featureRowText: {
     flex: 1,
-    fontFamily: 'Inter_500Medium',
+    fontFamily: 'DMSans_500Medium',
     fontSize: 14,
     color: colors.textPrimary,
     lineHeight: 20,
@@ -297,10 +297,10 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
     ...shadow.md,
   },
-  ctaText: { fontFamily: 'Inter_700Bold', fontSize: 17, color: '#000' },
+  ctaText: { fontFamily: 'DMSans_700Bold', fontSize: 17, color: '#000' },
   fine: {
     textAlign: 'center',
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 12,
     color: colors.textTertiary,
   },
@@ -309,13 +309,13 @@ const styles = StyleSheet.create({
   stepHeader: { paddingHorizontal: spacing.lg, paddingTop: spacing.lg, paddingBottom: spacing.sm },
   stepTitle: {
     fontSize: 28,
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'DMSans_700Bold',
     color: colors.textPrimary,
     marginBottom: spacing.xs,
   },
   stepSub: {
     fontSize: 14,
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     color: colors.textSecondary,
     marginBottom: spacing.sm,
   },
@@ -344,11 +344,11 @@ const styles = StyleSheet.create({
     borderColor: colors.accentBlue,
   },
   chipText: {
-    fontFamily: 'Inter_500Medium',
+    fontFamily: 'DMSans_500Medium',
     fontSize: 13,
     color: colors.textSecondary,
   },
-  chipTextActive: { color: '#000', fontFamily: 'Inter_600SemiBold' },
+  chipTextActive: { color: '#000', fontFamily: 'DMSans_600SemiBold' },
   brandEmoji: { fontSize: 16 },
 
   // Nav bar
@@ -386,5 +386,5 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     ...shadow.md,
   },
-  navNextText: { fontFamily: 'Inter_600SemiBold', fontSize: 15, color: '#000' },
+  navNextText: { fontFamily: 'DMSans_600SemiBold', fontSize: 15, color: '#000' },
 });

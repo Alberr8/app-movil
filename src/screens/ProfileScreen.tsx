@@ -191,7 +191,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
   scroll: { padding: spacing.md, paddingBottom: spacing.xxl },
-  title: { fontFamily: 'Inter_700Bold', fontSize: 34, color: colors.textPrimary, marginBottom: spacing.lg },
+  title: { fontFamily: 'DMSans_700Bold', fontSize: 34, color: colors.textPrimary, marginBottom: spacing.lg },
   card: {
     backgroundColor: colors.card,
     borderRadius: radius.lg,
@@ -209,9 +209,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: spacing.sm,
   },
-  avatarText: { fontFamily: 'Inter_700Bold', fontSize: 24, color: '#000000' },
+  avatarText: { fontFamily: 'DMSans_700Bold', fontSize: 24, color: '#000000' },
   nameInput: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 17,
     color: colors.textPrimary,
     textAlign: 'center',
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   sectionLabel: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 11,
     color: colors.textSecondary,
     textTransform: 'uppercase',
@@ -236,8 +236,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...shadow.sm,
   },
-  statValue: { fontFamily: 'Inter_800ExtraBold', fontSize: 28, color: colors.textPrimary },
-  statLabel: { fontFamily: 'Inter_400Regular', fontSize: 11, color: colors.textSecondary, textAlign: 'center', marginTop: 2 },
+  statValue: { fontFamily: 'CormorantGaramond_600SemiBold', fontSize: 28, color: colors.textPrimary },
+  statLabel: { fontFamily: 'DMSans_400Regular', fontSize: 11, color: colors.textSecondary, textAlign: 'center', marginTop: 2 },
   langRow: { flexDirection: 'row', gap: spacing.sm },
   langBtn: {
     flex: 1,
@@ -247,10 +247,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   langBtnActive: { backgroundColor: colors.accent },
-  langBtnText: { fontFamily: 'Inter_600SemiBold', fontSize: 14, color: colors.textSecondary },
+  langBtnText: { fontFamily: 'DMSans_600SemiBold', fontSize: 14, color: colors.textSecondary },
   langBtnTextActive: { color: '#000000' },
   notifRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  notifText: { fontFamily: 'Inter_400Regular', fontSize: 15, color: colors.textPrimary, flex: 1 },
+  notifText: { fontFamily: 'DMSans_400Regular', fontSize: 15, color: colors.textPrimary, flex: 1 },
 
   // ── Weekly coaching ──
   coachingCard: {
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   coachingLoadingText: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 14,
     color: colors.textSecondary,
   },
@@ -278,14 +278,14 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   coachingNudgeLabel: {
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'DMSans_700Bold',
     fontSize: 11,
     color: colors.accentDark,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
   },
   coachingSummaryText: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 14,
     color: colors.textPrimary,
     lineHeight: 22,
@@ -298,12 +298,12 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   coachingRefreshText: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 13,
     color: colors.accentDark,
   },
   coachingErrorText: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 13,
     color: colors.scoreLow,
     marginBottom: spacing.sm,
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   coachingBtnText: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 15,
     color: '#000000',
   },

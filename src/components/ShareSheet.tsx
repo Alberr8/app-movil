@@ -83,7 +83,7 @@ export default function ShareSheet({ score, lang }: Props) {
 const styles = StyleSheet.create({
   container: { marginVertical: spacing.md },
   label: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 18,
     color: '#FFFFFF',
     marginBottom: spacing.sm,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btnLabel: {
-    fontFamily: 'Inter_500Medium',
+    fontFamily: 'DMSans_500Medium',
     fontSize: 11,
     color: 'rgba(255,255,255,0.75)',
     letterSpacing: 0.2,

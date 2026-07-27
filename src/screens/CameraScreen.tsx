@@ -158,6 +158,15 @@ export default function CameraScreen() {
       <SafeAreaView style={styles.safe}>
         {/* ── Top bar ── */}
         <View style={styles.topBar}>
+          {/* Close button — navigates back to Wardrobe (tab bar hidden on Camera) */}
+          <TouchableOpacity
+            style={styles.closeBtn}
+            onPress={() => nav.navigate('Main', { screen: 'Wardrobe' })}
+            activeOpacity={0.75}
+          >
+            <Ionicons name="close" size={20} color="#FFF" />
+          </TouchableOpacity>
+
           {/* Weekly challenge pips */}
           <View style={styles.pipsRow}>
             {[0, 1, 2].map(i => (
@@ -324,6 +333,14 @@ const styles = StyleSheet.create({
     paddingTop: spacing.sm,
     paddingBottom: spacing.sm,
   },
+  closeBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0,0,0,0.42)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   pipsRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -348,7 +365,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.10)',
     maxWidth: width * 0.52,
   },
-  sportPillText: { fontFamily: 'Inter_600SemiBold', fontSize: 13, color: '#FFF', flex: 1 },
+  sportPillText: { fontFamily: 'DMSans_600SemiBold', fontSize: 13, color: '#FFF', flex: 1 },
 
   // ── Dropdown ──
   dropdown: {
@@ -378,8 +395,8 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgba(255,255,255,0.05)',
   },
   dropdownItemActive: { backgroundColor: 'rgba(181,253,89,0.09)' },
-  dropdownItemText: { fontFamily: 'Inter_400Regular', fontSize: 14, color: 'rgba(255,255,255,0.65)', flex: 1 },
-  dropdownItemTextActive: { fontFamily: 'Inter_600SemiBold', color: '#FFF' },
+  dropdownItemText: { fontFamily: 'DMSans_400Regular', fontSize: 14, color: 'rgba(255,255,255,0.65)', flex: 1 },
+  dropdownItemTextActive: { fontFamily: 'DMSans_600SemiBold', color: '#FFF' },
 
   // ── Scan frame ──
   scanFrame: {
@@ -426,13 +443,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xl,
   },
   emptyTitle: {
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'DMSans_700Bold',
     fontSize: 20,
     color: '#FFF',
     textAlign: 'center',
   },
   emptyHint: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 14,
     color: 'rgba(255,255,255,0.40)',
     textAlign: 'center',
@@ -445,7 +462,7 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   hint: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 14,
     color: 'rgba(255,255,255,0.50)',
     textAlign: 'center',
@@ -461,7 +478,7 @@ const styles = StyleSheet.create({
     ...shadow.glow,
   },
   scoreBtnLoading: { opacity: 0.65 },
-  scoreBtnText: { fontFamily: 'Inter_700Bold', fontSize: 17, color: '#000000' },
+  scoreBtnText: { fontFamily: 'DMSans_700Bold', fontSize: 17, color: '#000000' },
 
   shutterRow: {
     flexDirection: 'row',
@@ -506,8 +523,8 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     padding: spacing.xl,
   },
-  permTitle: { fontFamily: 'Inter_700Bold', fontSize: 22, color: '#FFF', textAlign: 'center' },
-  permSub: { fontFamily: 'Inter_400Regular', fontSize: 15, color: 'rgba(255,255,255,0.50)', textAlign: 'center', lineHeight: 22 },
+  permTitle: { fontFamily: 'DMSans_700Bold', fontSize: 22, color: '#FFF', textAlign: 'center' },
+  permSub: { fontFamily: 'DMSans_400Regular', fontSize: 15, color: 'rgba(255,255,255,0.50)', textAlign: 'center', lineHeight: 22 },
   permBtn: {
     backgroundColor: colors.accentBlue,
     borderRadius: radius.md,
@@ -515,12 +532,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xl,
     marginTop: spacing.sm,
   },
-  permBtnText: { fontFamily: 'Inter_600SemiBold', fontSize: 16, color: '#000000' },
+  permBtnText: { fontFamily: 'DMSans_600SemiBold', fontSize: 16, color: '#000000' },
   permGallery: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
     paddingVertical: spacing.sm,
   },
-  permGalleryText: { fontFamily: 'Inter_400Regular', fontSize: 14, color: 'rgba(255,255,255,0.50)' },
+  permGalleryText: { fontFamily: 'DMSans_400Regular', fontSize: 14, color: 'rgba(255,255,255,0.50)' },
 });

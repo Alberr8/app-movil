@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     paddingTop: spacing.md,
     paddingBottom: spacing.lg,
   },
-  title: { fontFamily: 'Inter_700Bold', fontSize: 34, color: colors.textPrimary },
-  sub: { fontFamily: 'Inter_400Regular', fontSize: 14, color: colors.textSecondary, marginTop: 2 },
+  title: { fontFamily: 'DMSans_700Bold', fontSize: 34, color: colors.textPrimary },
+  sub: { fontFamily: 'DMSans_400Regular', fontSize: 14, color: colors.textSecondary, marginTop: 2 },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -80,6 +80,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  value: { fontFamily: 'Inter_800ExtraBold', fontSize: 40, color: colors.textPrimary },
-  label: { fontFamily: 'Inter_500Medium', fontSize: 13, color: colors.textSecondary, textAlign: 'center' },
+  value: { fontFamily: 'CormorantGaramond_600SemiBold', fontSize: 40, color: colors.textPrimary },
+  label: { fontFamily: 'DMSans_500Medium', fontSize: 13, color: colors.textSecondary, textAlign: 'center' },
 });

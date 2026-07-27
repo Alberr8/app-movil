@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   scroll: { padding: spacing.md, paddingBottom: spacing.xxl },
   ringArea: { alignItems: 'center', marginVertical: spacing.xl },
   basis: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 12,
     color: 'rgba(255,255,255,0.5)',
     textAlign: 'center',
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
   },
   barRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   barLabel: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 12,
     color: 'rgba(255,255,255,0.75)',
     width: 100,
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
   },
   barFill: { height: '100%', borderRadius: 3 },
   barScore: {
-    fontFamily: 'Inter_500Medium',
+    fontFamily: 'DMSans_500Medium',
     fontSize: 11,
     color: '#FFF',
     width: 26,
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   },
 
   sectionTitle: {
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'DMSans_700Bold',
     fontSize: 18,
     color: '#FFFFFF',
     marginBottom: spacing.sm,
@@ -329,13 +329,13 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   recNum: {
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'DMSans_700Bold',
     fontSize: 15,
     color: colors.accentBlue,
     width: 18,
   },
   recText: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 14,
     color: 'rgba(255,255,255,0.9)',
     flex: 1,
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   productBrand: {
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'DMSans_700Bold',
     fontSize: 12,
     color: 'rgba(255,255,255,0.5)',
     textTransform: 'uppercase',
@@ -371,19 +371,19 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   productTagText: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 10,
     color: '#000000',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   productName: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 15,
     color: '#FFFFFF',
   },
   productReason: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 13,
     color: 'rgba(255,255,255,0.72)',
     lineHeight: 19,
@@ -395,19 +395,19 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   productLinkText: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 13,
     color: colors.accentBlue,
   },
 
   // ── Coaching nudge ──
   nudgeCard: {
-    backgroundColor: 'rgba(101,195,1,0.14)',
+    backgroundColor: 'rgba(212,255,63,0.13)',
     borderRadius: radius.lg,
     padding: spacing.md,
     marginBottom: spacing.lg,
     borderWidth: 1,
-    borderColor: 'rgba(101,195,1,0.32)',
+    borderColor: 'rgba(212,255,63,0.28)',
   },
   nudgeHeader: {
     flexDirection: 'row',
@@ -416,14 +416,14 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   nudgeLabel: {
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'DMSans_700Bold',
     fontSize: 11,
     color: colors.accentBlue,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
   },
   nudgeText: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 14,
     color: 'rgba(255,255,255,0.92)',
     lineHeight: 21,
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
   },
   saveBtnDone: { backgroundColor: colors.scoreHigh },
   saveBtnText: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 17,
     color: '#000000',
   },
@@ -455,7 +455,7 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   toastText: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 14,
     color: '#FFFFFF',
   },
@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   dateSectionLabel: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 13,
     color: 'rgba(255,255,255,0.65)',
     marginBottom: spacing.sm,
@@ -488,12 +488,12 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   dateChipText: {
-    fontFamily: 'Inter_500Medium',
+    fontFamily: 'DMSans_500Medium',
     fontSize: 13,
     color: 'rgba(255,255,255,0.75)',
   },
   dateChipTextActive: {
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'DMSans_700Bold',
     color: '#000000',
   },
 });
