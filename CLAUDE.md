@@ -35,6 +35,32 @@ npx tsc --noEmit
 
 No test runner or linter is configured.
 
+## EAS Build
+
+`eas.json` defines three build profiles (see `npx eas-cli build --help`):
+
+```bash
+# One-time setup (creates the Expo account project, writes expo.extra.eas.projectId into app.json)
+npx eas-cli login
+npx eas-cli init
+
+# Internal test build with dev client (Expo Go replacement, hot reload)
+npx eas-cli build --profile development --platform android
+
+# Installable APK/simulator build for internal testing (TestFlight/Play Internal Testing alternative)
+npx eas-cli build --profile preview --platform android
+npx eas-cli build --profile preview --platform ios
+
+# Store-ready build (auto-increments build number)
+npx eas-cli build --profile production --platform all
+
+# Upload a production build to App Store Connect / Play Console
+npx eas-cli submit --profile production --platform ios
+npx eas-cli submit --profile production --platform android
+```
+
+`app.json` sets `ios.bundleIdentifier` and `android.package` to `com.albertoriesgo.sportstyle` — this is effectively permanent once submitted to either store, do not change it casually.
+
 ## Navigation structure
 
 Two-level navigation defined entirely in `App.tsx`:
