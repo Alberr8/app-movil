@@ -113,6 +113,9 @@ const strings = {
     profileWeeklyCoachingBtn: 'Analizar mi semana',
     profileWeeklyCoachingRefresh: 'Regenerar',
     profileWeeklyCoachingLoading: 'Analizando tu semana...',
+    profileLegal: 'Legal',
+    profilePrivacyPolicy: 'Política de Privacidad',
+    profileTerms: 'Términos de Servicio',
     scoreCoachingNudge: 'Tu coach dice',
   },
   en: {
@@ -184,6 +187,9 @@ const strings = {
     profileWeeklyCoachingBtn: 'Analyze my week',
     profileWeeklyCoachingRefresh: 'Refresh',
     profileWeeklyCoachingLoading: 'Analyzing your week...',
+    profileLegal: 'Legal',
+    profilePrivacyPolicy: 'Privacy Policy',
+    profileTerms: 'Terms of Service',
     scoreCoachingNudge: 'Your coach says',
   },
 } as const;

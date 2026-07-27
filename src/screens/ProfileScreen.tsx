@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import {
   View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity,
-  TextInput, Switch, Platform, ActivityIndicator,
+  TextInput, Switch, Platform, ActivityIndicator, Linking,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -16,6 +16,9 @@ import {
 } from '../services/storage';
 import { scheduleDailyReminder, cancelDailyReminder, requestNotificationPermission } from '../services/notifications';
 import ChallengeBar from '../components/ChallengeBar';
+
+const PRIVACY_POLICY_URL = 'https://alberr8.github.io/app-movil/privacy-policy.html';
+const TERMS_URL = 'https://alberr8.github.io/app-movil/terms.html';
 
 export default function ProfileScreen() {
   const [lang, setLang] = useState<Language>('es');
@@ -183,6 +186,28 @@ export default function ProfileScreen() {
             thumbColor="#FFFFFF"
           />
         </View>
+
+        {/* Legal */}
+        <Text style={styles.sectionLabel}>{t('profileLegal', lang)}</Text>
+        <View style={styles.card}>
+          <TouchableOpacity
+            style={styles.legalRow}
+            activeOpacity={0.7}
+            onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}
+          >
+            <Text style={styles.legalText}>{t('profilePrivacyPolicy', lang)}</Text>
+            <Ionicons name="chevron-forward" size={16} color={colors.textTertiary} />
+          </TouchableOpacity>
+          <View style={styles.legalSeparator} />
+          <TouchableOpacity
+            style={styles.legalRow}
+            activeOpacity={0.7}
+            onPress={() => Linking.openURL(TERMS_URL)}
+          >
+            <Text style={styles.legalText}>{t('profileTerms', lang)}</Text>
+            <Ionicons name="chevron-forward" size={16} color={colors.textTertiary} />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -251,6 +276,14 @@ const styles = StyleSheet.create({
   langBtnTextActive: { color: '#000000' },
   notifRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   notifText: { fontFamily: 'DMSans_400Regular', fontSize: 15, color: colors.textPrimary, flex: 1 },
+  legalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: spacing.sm,
+  },
+  legalText: { fontFamily: 'DMSans_400Regular', fontSize: 15, color: colors.textPrimary },
+  legalSeparator: { height: 1, backgroundColor: colors.separator },
 
   // ── Weekly coaching ──
   coachingCard: {

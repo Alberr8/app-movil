@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidad — Sportstyle</title>
+<style>
+  :root {
+    --bg: #f6f7f3;
+    --card: #ffffff;
+    --text: #16161a;
+    --text-secondary: #56565f;
+    --accent: #87ab00;
+    --border: rgba(0,0,0,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16161a;
+      --card: #1f1f24;
+      --text: #f4f4f5;
+      --text-secondary: #9a9aa2;
+      --accent: #d4ff3f;
+      --border: rgba(255,255,255,0.1);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .lang-toggle {
+    display: flex;
+    gap: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px;
+  }
+  .lang-toggle button {
+    border: none;
+    background: transparent;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-secondary);
+  }
+  .lang-toggle button.active {
+    background: var(--accent);
+    color: #16161a;
+  }
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+  }
+  .updated {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 32px;
+  }
+  h2 {
+    font-size: 1.05rem;
+    margin-top: 36px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  p, li { color: var(--text); font-size: 0.95rem; }
+  ul { padding-left: 20px; }
+  a { color: var(--accent); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.9rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 12px 0;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th { color: var(--text-secondary); font-weight: 600; }
+  [data-lang="en"] { display: none; }
+  body.lang-en [data-lang="es"] { display: none; }
+  body.lang-en [data-lang="en"] { display: block; }
+  body.lang-en li[data-lang="en"], body.lang-en td[data-lang="en"] { display: table-cell; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">Sportstyle</div>
+    <div class="lang-toggle">
+      <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+
+  <div data-lang="es">
+    <h1>Política de Privacidad</h1>
+    <p class="updated">Última actualización: 27 de julio de 2026</p>
+
+    <p>Esta Política de Privacidad describe cómo <strong>Alberto Riesgo</strong> ("nosotros", "el responsable"), desarrollador de la aplicación móvil <strong>Sportstyle</strong> ("la App"), recopila, usa y protege tus datos personales.</p>
+
+    <div class="card">
+      <strong>Responsable del tratamiento:</strong> Alberto Riesgo (persona física, desarrollador independiente)<br>
+      <strong>Contacto:</strong> <a href="mailto:alberto.riesgo.ar@gmail.com">alberto.riesgo.ar@gmail.com</a>
+    </div>
+
+    <h2>1. Qué datos recopilamos</h2>
+    <table>
+      <tr><th>Dato</th><th>Detalle</th></tr>
+      <tr><td>Cuenta</td><td>Email y contraseña (gestionados por Supabase Auth). La contraseña se almacena cifrada y nunca es accesible por nosotros en texto plano.</td></tr>
+      <tr><td>Perfil</td><td>Nombre (opcional), idioma preferido, deportes y marcas favoritas, preferencia de notificaciones.</td></tr>
+      <tr><td>Fotos de outfits</td><td>Las fotos que tomas se guardan en tu dispositivo y se envían de forma puntual a nuestro proveedor de IA para generar la puntuación. No almacenamos tus fotografías como archivos en nuestros servidores.</td></tr>
+      <tr><td>Resultados de puntuación</td><td>Nota, desglose y recomendaciones generadas para cada outfit, asociadas a tu cuenta para mostrar tu historial y estadísticas.</td></tr>
+      <tr><td>Registro técnico de uso de IA</td><td>Fecha y función invocada (sin contenido), usado únicamente para aplicar un límite diario de análisis y evitar abusos.</td></tr>
+    </table>
+    <p>No utilizamos cookies de seguimiento, SDKs de publicidad ni herramientas de analítica de terceros.</p>
+
+    <h2>2. Para qué usamos tus datos</h2>
+    <ul>
+      <li>Prestar el servicio principal: valorar tu outfit deportivo mediante inteligencia artificial y ofrecerte recomendaciones.</li>
+      <li>Mantener tu armario virtual y tu progreso (reto semanal, estadísticas).</li>
+      <li>Enviarte recordatorios locales en tu dispositivo (si los activas), gestionados enteramente por el sistema operativo, sin servidor de notificaciones push.</li>
+      <li>Prevenir el uso abusivo del servicio de IA mediante límites diarios.</li>
+    </ul>
+
+    <h2>3. Base legal (RGPD)</h2>
+    <p>Tratamos tus datos en base a la <strong>ejecución del contrato</strong> de prestación del servicio que aceptas al crear una cuenta, y en base a tu <strong>consentimiento</strong> explícito para funciones opcionales como las notificaciones.</p>
+
+    <h2>4. Con quién compartimos tus datos</h2>
+    <p>No vendemos ni cedemos tus datos a terceros con fines comerciales. Compartimos datos únicamente con los proveedores estrictamente necesarios para operar la App:</p>
+    <ul>
+      <li><strong>Supabase</strong> — infraestructura de autenticación, base de datos y funciones de servidor.</li>
+      <li><strong>Anthropic (Claude AI)</strong> — procesamiento puntual de tus fotografías para generar la puntuación del outfit. La imagen se envía en el momento del análisis y no queda almacenada de forma permanente por este proveedor con fines distintos al procesamiento de tu solicitud. Este proveedor tiene sede en EE. UU.; cuando existe transferencia internacional de datos, se realiza conforme a los mecanismos de garantía previstos por el RGPD (cláusulas contractuales tipo).</li>
+    </ul>
+
+    <h2>5. Conservación de datos</h2>
+    <p>Conservamos tus datos mientras mantengas tu cuenta activa. Puedes solicitar la eliminación de tu cuenta y de todos tus datos en cualquier momento escribiendo a <a href="mailto:alberto.riesgo.ar@gmail.com">alberto.riesgo.ar@gmail.com</a>; la eliminaremos en un plazo máximo de 30 días.</p>
+
+    <h2>6. Tus derechos</h2>
+    <p>Si resides en la Unión Europea, tienes derecho a acceder, rectificar, suprimir, limitar u oponerte al tratamiento de tus datos, así como a la portabilidad de los mismos. Puedes ejercer estos derechos escribiendo al contacto anterior. También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD).</p>
+
+    <h2>7. Menores de edad</h2>
+    <p>Sportstyle no está dirigida a menores de 16 años. Si eres menor de esa edad, no debes crear una cuenta ni usar la App sin el consentimiento de tu tutor legal.</p>
+
+    <h2>8. Seguridad</h2>
+    <p>Aplicamos medidas técnicas razonables: cifrado en tránsito (HTTPS), autenticación mediante tokens JWT, y políticas de seguridad a nivel de fila (Row Level Security) que impiden que un usuario acceda a los datos de otro.</p>
+
+    <h2>9. Cambios en esta política</h2>
+    <p>Podemos actualizar esta política ocasionalmente. Publicaremos cualquier cambio relevante en esta misma página con una nueva fecha de actualización.</p>
+
+    <h2>10. Contacto</h2>
+    <p>Para cualquier duda sobre esta política o tus datos: <a href="mailto:alberto.riesgo.ar@gmail.com">alberto.riesgo.ar@gmail.com</a></p>
+  </div>
+
+  <div data-lang="en">
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: July 27, 2026</p>
+
+    <p>This Privacy Policy explains how <strong>Alberto Riesgo</strong> ("we", "the developer"), developer of the <strong>Sportstyle</strong> mobile app ("the App"), collects, uses, and protects your personal data.</p>
+
+    <div class="card">
+      <strong>Data controller:</strong> Alberto Riesgo (independent individual developer)<br>
+      <strong>Contact:</strong> <a href="mailto:alberto.riesgo.ar@gmail.com">alberto.riesgo.ar@gmail.com</a>
+    </div>
+
+    <h2>1. What data we collect</h2>
+    <table>
+      <tr><th>Data</th><th>Detail</th></tr>
+      <tr><td>Account</td><td>Email and password (managed by Supabase Auth). Passwords are stored encrypted and never accessible to us in plain text.</td></tr>
+      <tr><td>Profile</td><td>Name (optional), preferred language, favorite sports and brands, notification preference.</td></tr>
+      <tr><td>Outfit photos</td><td>Photos you take are stored on your device and sent on a per-request basis to our AI provider to generate the score. We do not store your photographs as files on our servers.</td></tr>
+      <tr><td>Score results</td><td>Score, breakdown, and recommendations generated for each outfit, linked to your account to show your history and stats.</td></tr>
+      <tr><td>AI usage log</td><td>Timestamp and function called (no content), used solely to enforce a daily analysis limit and prevent abuse.</td></tr>
+    </table>
+    <p>We do not use tracking cookies, advertising SDKs, or third-party analytics tools.</p>
+
+    <h2>2. How we use your data</h2>
+    <ul>
+      <li>Provide the core service: rate your sports outfit using AI and give you recommendations.</li>
+      <li>Maintain your virtual wardrobe and progress (weekly challenge, stats).</li>
+      <li>Send you local reminders on your device (if enabled), handled entirely by the OS, with no push notification server involved.</li>
+      <li>Prevent abusive use of the AI service through daily limits.</li>
+    </ul>
+
+    <h2>3. Legal basis (GDPR)</h2>
+    <p>We process your data based on the <strong>performance of the contract</strong> you accept when creating an account, and on your explicit <strong>consent</strong> for optional features such as notifications.</p>
+
+    <h2>4. Who we share your data with</h2>
+    <p>We do not sell or share your data with third parties for commercial purposes. We only share data with providers strictly necessary to operate the App:</p>
+    <ul>
+      <li><strong>Supabase</strong> — authentication, database, and server function infrastructure.</li>
+      <li><strong>Anthropic (Claude AI)</strong> — one-time processing of your photos to generate the outfit score. The image is sent at the time of analysis and is not permanently retained by this provider for purposes beyond processing your request. This provider is based in the US; where an international data transfer occurs, it relies on GDPR safeguard mechanisms (standard contractual clauses).</li>
+    </ul>
+
+    <h2>5. Data retention</h2>
+    <p>We retain your data for as long as your account is active. You may request deletion of your account and all associated data at any time by emailing <a href="mailto:alberto.riesgo.ar@gmail.com">alberto.riesgo.ar@gmail.com</a>; we will delete it within 30 days.</p>
+
+    <h2>6. Your rights</h2>
+    <p>If you reside in the European Union, you have the right to access, rectify, erase, restrict, or object to the processing of your data, as well as data portability. You can exercise these rights by contacting us at the email above. You also have the right to lodge a complaint with the Spanish Data Protection Agency (AEPD).</p>
+
+    <h2>7. Children</h2>
+    <p>Sportstyle is not directed at children under 16. If you are under that age, you must not create an account or use the App without the consent of your legal guardian.</p>
+
+    <h2>8. Security</h2>
+    <p>We apply reasonable technical measures: encryption in transit (HTTPS), JWT token-based authentication, and Row Level Security policies that prevent any user from accessing another user's data.</p>
+
+    <h2>9. Changes to this policy</h2>
+    <p>We may update this policy occasionally. Any relevant change will be published on this same page with a new update date.</p>
+
+    <h2>10. Contact</h2>
+    <p>For any questions about this policy or your data: <a href="mailto:alberto.riesgo.ar@gmail.com">alberto.riesgo.ar@gmail.com</a></p>
+  </div>
+
+  <p style="margin-top:48px;"><a href="terms.html" data-lang="es">Ver Términos de Servicio →</a><a href="terms.html" data-lang="en">View Terms of Service →</a></p>
+</div>
+
+<script>
+  function setLang(lang) {
+    document.body.classList.toggle('lang-en', lang === 'en');
+    document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    localStorage.setItem('sportstyle-legal-lang', lang);
+  }
+  var saved = localStorage.getItem('sportstyle-legal-lang');
+  if (saved) setLang(saved);
+</script>
+</body>
+</html>
