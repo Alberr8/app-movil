@@ -62,13 +62,20 @@ and decide which branch of the root Stack is registered. `OnboardingScreen` rece
 `nav.replace('Main')` from inside Onboarding silently no-oped and left users stuck until they
 force-reloaded the app.)
 
-## Scoring is 100% local / offline
+## Scoring: AI Edge Function, with a local fallback
 
 `src/services/scoring.ts` → `scoreOutfit(imageUri, exerciseType, lang)`:
-- The image is **never sent anywhere**. The URI is accepted but ignored.
-- Returns a randomly weighted score (5–10) with a 2.2 s simulated delay.
-- Picks sport-category-specific text recommendations and product links from static data pools inside the file.
-- `ExerciseType` maps to one of six `SportCategory` buckets (`endurance | strength | court | team | outdoor | mind_body`) which drive all recommendation content.
+- **This is not offline.** It first calls `scoreOutfitWithAI()`, which base64-encodes the photo
+  and invokes the Supabase Edge Function `score-outfit` (`supabase.functions.invoke`) — the image
+  **is** sent to the backend for real analysis. Only if that call throws (network error, missing
+  function, non-2xx response) does it fall back to `weightedRandom()` — a randomly weighted score
+  (5–10) with a 2.2 s simulated delay, plus recommendations/products picked from static local data
+  pools. Don't describe this feature as "the photo never leaves the device" — that was true of an
+  earlier version but no longer is.
+- `ExerciseType` maps to one of six `SportCategory` buckets (`endurance | strength | court | team | outdoor | mind_body`) which drive the fallback's recommendation content (and the AI path's product picks).
+- In this dev environment the `score-outfit` Edge Function call fails with a CORS/400 error, so in
+  practice every score you see locally comes from the local fallback — verify against the actual
+  Supabase project's Edge Functions before assuming the AI path is exercised in a given environment.
 
 ## Storage
 
@@ -107,7 +114,9 @@ as the auth storage adapter). Used for:
 - Weekly AI coaching summary (`storage.ts` → `getWeeklyCoachingSummary`): invokes the
   `weekly-coaching` Supabase Edge Function with the week's outfits; requires network.
 
-Everything else (scoring, saved outfits, stats, language, notifications) works fully offline.
+Saved outfits, stats, language, and notifications work fully offline. Scoring tries the network
+first (see "Scoring: AI Edge Function, with a local fallback" above) and only degrades to local
+when that fails.
 
 ## Cross-platform alerts
 
@@ -117,6 +126,17 @@ throwing, so it's easy to ship a broken error message without noticing. Use
 falls back to `window.alert` on web. `CameraScreen.tsx` still has one raw `Alert.alert` call, but
 it's behind an `if (Platform.OS !== 'web')` guard so it's unreachable there — leave it as is unless
 that guard changes.
+
+## Camera tab pointer-events (web)
+
+On web, `CameraScreen`'s entire subtree used to inherit `pointer-events: none` from the bottom-tabs
+screen container — a react-navigation/RN-Web interaction that, as far as we've observed, only
+affects this tab (Wardrobe/Stats/Premium/Profile were unaffected). The symptom: every control on
+the screen (shutter, gallery picker, sport selector) rendered fine but did nothing on click, with
+no console error. Fixed by explicitly setting `pointerEvents: 'auto'` in `styles.root` in
+`CameraScreen.tsx`. If a similar "renders fine, nothing responds to clicks" symptom shows up on
+another screen, check computed `pointer-events` up the ancestor chain in devtools before assuming
+the bug is in the screen's own event handlers.
 
 ## Architecture notes
 

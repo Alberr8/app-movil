@@ -305,7 +305,10 @@ export default function CameraScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#0A0A0A' },
+  // pointerEvents forced here because on web this screen's whole subtree otherwise inherits
+  // `pointer-events: none` from the bottom-tabs screen container (a react-navigation/RN-Web
+  // interaction, only observed on this tab) — without it, nothing on this screen is clickable.
+  root: { flex: 1, backgroundColor: '#0A0A0A', pointerEvents: 'auto' },
   safe: { flex: 1 },
 
   gradientTop: {
