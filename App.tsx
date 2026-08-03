@@ -281,7 +281,9 @@ export default function App() {
           {!session ? (
             <Stack.Screen name="Auth" component={AuthScreen} />
           ) : !onboardingDone ? (
-            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+            <Stack.Screen name="Onboarding">
+              {() => <OnboardingScreen onDone={() => setOnboardingDone(true)} />}
+            </Stack.Screen>
           ) : (
             <>
               <Stack.Screen name="Main" component={TabNavigator} />
