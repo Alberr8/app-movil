@@ -16,6 +16,11 @@ Arreglos recientes:
 - El onboarding ya no se queda congelado al pulsar "Empezar" (bug de navegación en `App.tsx`/`OnboardingScreen.tsx`).
 - Los errores de login/registro ahora se muestran también en web (antes `Alert.alert` no hacía nada ahí).
 - La tab de Cámara ya responde a los toques en web (heredaba `pointer-events: none` del navigator de tabs).
+- Los outfits guardados ya no desaparecen del Armario/Stats a los pocos segundos: `getOutfits()`
+  sobrescribía el caché local con lo que devolviera Supabase, así que si la sincronización fallaba
+  (como pasaba siempre, por un `worn_date` que faltaba en la tabla) el outfit recién guardado se
+  borraba solo. Ahora se fusiona en vez de sobrescribir.
+- ⚠️ **Pendiente en el backend**: falta aplicar la migración `supabase/migrations/20260803000000_add_outfits_worn_date.sql` en el proyecto Supabase real para que la sincronización de outfits funcione (hoy falla silenciosamente y todo vive solo en local).
 
 ## Características
 

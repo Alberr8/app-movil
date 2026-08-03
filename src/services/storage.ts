@@ -68,7 +68,10 @@ export async function saveOutfit(outfit: Outfit): Promise<{ challengeCount: numb
   return { challengeCount: count, premiumUnlocked };
 }
 
-// Read: return cache immediately, refresh from Supabase in background
+// Read: return cache immediately, refresh from Supabase in background.
+// Merges with the current cache rather than overwriting it — an outfit saved locally
+// that hasn't synced yet (or never will, e.g. a schema mismatch) must not be wiped out
+// just because the remote fetch came back without it.
 export async function getOutfits(): Promise<Outfit[]> {
   const raw = await AsyncStorage.getItem(KEYS.outfits);
   const cached: Outfit[] = raw ? JSON.parse(raw) : [];
@@ -81,7 +84,7 @@ export async function getOutfits(): Promise<Outfit[]> {
       .select('*')
       .eq('user_id', data.user.id)
       .order('created_at', { ascending: false })
-      .then(({ data: rows, error }) => {
+      .then(async ({ data: rows, error }) => {
         if (error || !rows) return;
         const remote: Outfit[] = rows.map(r => ({
           id: r.id,
@@ -92,7 +95,15 @@ export async function getOutfits(): Promise<Outfit[]> {
           weekKey: r.week_key,
           wornDate: r.worn_date ?? undefined,
         }));
-        AsyncStorage.setItem(KEYS.outfits, JSON.stringify(remote));
+
+        const currentRaw = await AsyncStorage.getItem(KEYS.outfits);
+        const current: Outfit[] = currentRaw ? JSON.parse(currentRaw) : [];
+        const remoteIds = new Set(remote.map(o => o.id));
+        const localOnly = current.filter(o => !remoteIds.has(o.id));
+        const merged = [...remote, ...localOnly].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
+        AsyncStorage.setItem(KEYS.outfits, JSON.stringify(merged));
       });
   });
 
