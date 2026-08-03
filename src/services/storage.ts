@@ -146,9 +146,18 @@ export async function getLanguage(): Promise<Language> {
   return (lang as Language) ?? 'es';
 }
 
+// Screens re-read the language on focus via useFocusEffect, but persistent UI that isn't a
+// screen (the custom tab bar) has no focus event to hook a refresh onto — it needs to be told.
+const languageListeners = new Set<(lang: Language) => void>();
+export function onLanguageChange(fn: (lang: Language) => void): () => void {
+  languageListeners.add(fn);
+  return () => languageListeners.delete(fn);
+}
+
 export async function setLanguage(lang: Language): Promise<void> {
   await AsyncStorage.setItem(KEYS.language, lang);
   syncProfile({ language: lang });
+  languageListeners.forEach(fn => fn(lang));
 }
 
 export async function getUserName(): Promise<string> {

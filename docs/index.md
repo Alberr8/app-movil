@@ -21,6 +21,7 @@ Arreglos recientes:
   (como pasaba siempre, por un `worn_date` que faltaba en la tabla) el outfit recién guardado se
   borraba solo. Ahora se fusiona en vez de sobrescribir.
 - ⚠️ **Pendiente en el backend**: falta aplicar la migración `supabase/migrations/20260803000000_add_outfits_worn_date.sql` en el proyecto Supabase real para que la sincronización de outfits funcione (hoy falla silenciosamente y todo vive solo en local).
+- Los nombres de la barra de tabs inferior ahora cambian al instante al cambiar idioma en Perfil — antes se quedaban congelados porque la barra solo leía el idioma una vez, al arrancar la app.
 
 ## Características
 
