@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Keep docs/index.md in sync (GitHub Pages)
+
+`docs/index.md` is published live at https://alberr8.github.io/app-movil/ via GitHub Pages
+(legacy Jekyll build, source `master:/docs`). **Whenever you make a code change to this app,
+update `docs/index.md` to reflect the app's current state** (features, stack, "Estado actual" /
+recent-fixes section) **and commit + push it together with the code change** — don't leave it to
+a separate step or a later session. This is a standing instruction, not a one-off task.
+
 ## Important: Expo v56 Docs
 
 **Always read the versioned docs at https://docs.expo.dev/versions/v56.0.0/ before writing any Expo-related code.** APIs change between versions and the wrong version's docs will produce broken code.

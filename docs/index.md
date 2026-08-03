@@ -8,6 +8,15 @@ App móvil para puntuar y mejorar tus outfits deportivos. Analiza tu look según
 
 [Ver el código en GitHub](https://github.com/Alberr8/app-movil)
 
+## Estado actual
+
+Verificado end-to-end en navegador (registro → onboarding → cámara → puntuación → armario).
+Arreglos recientes:
+
+- El onboarding ya no se queda congelado al pulsar "Empezar" (bug de navegación en `App.tsx`/`OnboardingScreen.tsx`).
+- Los errores de login/registro ahora se muestran también en web (antes `Alert.alert` no hacía nada ahí).
+- La tab de Cámara ya responde a los toques en web (heredaba `pointer-events: none` del navigator de tabs).
+
 ## Características
 
 - Cuenta de usuario (registro/login con Supabase Auth) y onboarding inicial: tagline, selección de deportes favoritos y marcas favoritas
