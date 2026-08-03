@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  SafeAreaView, ActivityIndicator, KeyboardAvoidingView, Platform, Alert,
+  SafeAreaView, ActivityIndicator, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { supabase } from '../services/supabase';
 import { colors, spacing, radius, shadow } from '../constants/theme';
+import { showAlert } from '../utils/alert';
 
 type Mode = 'login' | 'register';
 
@@ -16,7 +17,7 @@ export default function AuthScreen() {
 
   async function handleSubmit() {
     if (!email.trim() || !password.trim()) {
-      Alert.alert('Error', 'Introduce tu email y contraseña.');
+      showAlert('Error', 'Introduce tu email y contraseña.');
       return;
     }
     setLoading(true);
@@ -24,13 +25,13 @@ export default function AuthScreen() {
       if (mode === 'register') {
         const { error } = await supabase.auth.signUp({ email: email.trim(), password });
         if (error) throw error;
-        Alert.alert('Cuenta creada', 'Revisa tu email para confirmar tu cuenta.');
+        showAlert('Cuenta creada', 'Revisa tu email para confirmar tu cuenta.');
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
         if (error) throw error;
       }
     } catch (e: any) {
-      Alert.alert('Error', e.message ?? 'Ha ocurrido un error.');
+      showAlert('Error', e.message ?? 'Ha ocurrido un error.');
     } finally {
       setLoading(false);
     }

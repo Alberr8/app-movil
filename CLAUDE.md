@@ -37,19 +37,30 @@ No test runner or linter is configured.
 
 ## Navigation structure
 
-Two-level navigation defined entirely in `App.tsx`:
+Two-level navigation defined entirely in `App.tsx`, gated by auth/onboarding state:
 
 ```
 RootStack (NativeStackNavigator)
-├── Main → TabNavigator (bottom tabs)
-│   ├── Camera   → CameraScreen   (tab: home / outfit rating entry point)
-│   ├── Premium  → PremiumScreen  (brand inspiration, locked behind weekly challenge)
-│   ├── Wardrobe → WardrobeScreen (saved outfits history)
-│   └── Profile  → ProfileScreen  (name, stats, language, notifications toggle)
-└── Score → ScoreScreen           (result after rating; slides up from bottom)
+├── Auth        → AuthScreen        (shown when there is no Supabase session)
+├── Onboarding  → OnboardingScreen  (shown when session exists but onboarding isn't done)
+└── Main        → TabNavigator (bottom tabs, custom tab bar with centered Camera FAB)
+│   ├── Wardrobe → WardrobeScreen  (calendar view + saved outfits, filter by sport)
+│   ├── Stats    → StatsScreen     (basic KPI grid: total/best/avg/this week)
+│   ├── Camera   → CameraScreen    (home / outfit rating entry point)
+│   ├── Premium  → PremiumScreen   (brand inspiration, locked behind weekly challenge)
+│   └── Profile  → ProfileScreen   (name, stats, language, notifications, weekly AI summary)
+    └── Score    → ScoreScreen     (result after rating; slides up from bottom, sibling of Main)
 ```
 
 Types for both navigators live in `src/types/index.ts` (`RootStackParamList`, `TabParamList`).
+
+`session` (Supabase) and `onboardingDone` (AsyncStorage flag) are both reactive state in `App.tsx`
+and decide which branch of the root Stack is registered. `OnboardingScreen` receives
+`onDone: () => void` as a prop and calls it instead of navigating directly — it must not call
+`nav.replace('Main')` itself, since `'Main'` isn't a registered screen in the navigator until
+`onboardingDone` flips to `true` and the parent re-renders. (This was a real bug: calling
+`nav.replace('Main')` from inside Onboarding silently no-oped and left users stuck until they
+force-reloaded the app.)
 
 ## Scoring is 100% local / offline
 
@@ -83,6 +94,29 @@ Types for both navigators live in `src/types/index.ts` (`RootStackParamList`, `T
 - `colors.accent` — always black (`#000000`); used for the tab bar active tint and primary chip fill.
 - `colors.scoreHigh / scoreMid / scoreLow` — green / orange / red for score display.
 - `shadow.sm / md / lg` — pre-built shadow objects; apply with spread (`...shadow.md`).
+
+## Auth & Supabase sync
+
+`src/services/supabase.ts` exports a configured client (URL + anon key hardcoded, `AsyncStorage`
+as the auth storage adapter). Used for:
+- Auth (`AuthScreen.tsx`): email/password sign up and sign in.
+- Preference sync (`OnboardingScreen.tsx`): on finishing onboarding, selected sports/brands are
+  synced to the `sports`/`brands`/`user_sports`/`user_brands` tables — best-effort, wrapped in
+  try/catch so a Supabase failure never blocks navigation (local AsyncStorage write happens first
+  and always succeeds).
+- Weekly AI coaching summary (`storage.ts` → `getWeeklyCoachingSummary`): invokes the
+  `weekly-coaching` Supabase Edge Function with the week's outfits; requires network.
+
+Everything else (scoring, saved outfits, stats, language, notifications) works fully offline.
+
+## Cross-platform alerts
+
+React Native's `Alert.alert` has no implementation on web — it silently no-ops instead of
+throwing, so it's easy to ship a broken error message without noticing. Use
+`showAlert(title, message)` from `src/utils/alert.ts` instead of importing `Alert` directly; it
+falls back to `window.alert` on web. `CameraScreen.tsx` still has one raw `Alert.alert` call, but
+it's behind an `if (Platform.OS !== 'web')` guard so it's unreachable there — leave it as is unless
+that guard changes.
 
 ## Architecture notes
 
