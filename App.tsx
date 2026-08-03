@@ -37,7 +37,7 @@ import OnboardingScreen from './src/screens/OnboardingScreen';
 import { RootStackParamList, TabParamList } from './src/types';
 import { colors, shadow } from './src/constants/theme';
 import { scheduleDailyReminder, requestNotificationPermission } from './src/services/notifications';
-import { getLanguage, getNotificationsEnabled } from './src/services/storage';
+import { getLanguage, getNotificationsEnabled, onLanguageChange } from './src/services/storage';
 import { supabase } from './src/services/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -70,7 +70,12 @@ const CAM_SIZE = 60;
 function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   const [lang, setLang] = useState('es');
-  useEffect(() => { getLanguage().then(setLang); }, []);
+  // The tab bar isn't a screen, so it has no focus event to hook a refresh onto when the
+  // language changes elsewhere (e.g. ProfileScreen) — subscribe instead of reading once.
+  useEffect(() => {
+    getLanguage().then(setLang);
+    return onLanguageChange(setLang);
+  }, []);
   const labels = TAB_LABELS[lang] ?? TAB_LABELS['es'];
 
   const leftNames:  TabName[] = ['Wardrobe', 'Stats'];
@@ -295,7 +300,9 @@ export default function App() {
           {!session ? (
             <Stack.Screen name="Auth" component={AuthScreen} />
           ) : !onboardingDone ? (
-            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+            <Stack.Screen name="Onboarding">
+              {() => <OnboardingScreen onDone={() => setOnboardingDone(true)} />}
+            </Stack.Screen>
           ) : (
             <>
               <Stack.Screen name="Main" component={TabNavigator} />

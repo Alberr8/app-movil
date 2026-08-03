@@ -112,7 +112,7 @@ export default function ScoreScreen() {
   async function handleSave() {
     if (saved) return;
     const outfit: Outfit = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       imageUri,
       exerciseType,
       score: result,

@@ -3,16 +3,14 @@ import {
   View, Text, TouchableOpacity, StyleSheet, SafeAreaView,
   ScrollView, Dimensions,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, spacing, radius, shadow } from '../constants/theme';
-import { RootStackParamList, ExerciseType } from '../types';
+import { ExerciseType } from '../types';
 import { SPORTS } from '../constants/i18n';
 import { supabase } from '../services/supabase';
 
-type Nav = NativeStackNavigationProp<RootStackParamList, 'Onboarding'>;
+type Props = { onDone: () => void };
 
 const BRANDS = [
   { id: 'nike',        label: 'Nike',         icon: '👟' },
@@ -35,8 +33,7 @@ const BRANDS = [
   { id: 'aloyoga',     label: 'Alo Yoga',      icon: '🌸' },
 ];
 
-export default function OnboardingScreen() {
-  const nav = useNavigation<Nav>();
+export default function OnboardingScreen({ onDone }: Props) {
   const [step, setStep] = useState(0);
   const [selectedSports, setSelectedSports] = useState<ExerciseType[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -95,7 +92,7 @@ export default function OnboardingScreen() {
       console.warn('[onboarding] Supabase sync failed (non-blocking):', e);
     }
 
-    nav.replace('Main');
+    onDone();
   }
 
   // ── Step 0: Hero ──────────────────────────────────────────────────────────
