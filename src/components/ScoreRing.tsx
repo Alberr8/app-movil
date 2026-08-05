@@ -51,15 +51,15 @@ export default function ScoreRing({ score, size = 160 }: Props) {
             height: size,
             borderRadius: size / 2,
             borderWidth: strokeWidth,
-            borderColor: 'rgba(255,255,255,0.2)',
+            borderColor: 'rgba(255,255,255,0.15)',
             position: 'absolute',
           }}
         />
-        {/* Score text */}
+        {/* Score text — Cormorant Garamond editorial */}
         <Animated.Text
           style={[
             styles.scoreText,
-            { fontSize: size * 0.32, color: '#FFFFFF' },
+            { fontSize: size * 0.38, color: '#FFFFFF' },
           ]}
         >
           {displayScore.interpolate({
@@ -106,10 +106,10 @@ function WebScoreRing({ score, size, color }: { score: number; size: number; col
           style={{ transition: 'stroke-dashoffset 1.4s ease' }}
         />
       </svg>
-      <Text style={[styles.scoreText, { fontSize: size * 0.32, color: '#FFFFFF' }]}>
+      <Text style={[styles.scoreText, { fontSize: size * 0.38, color: '#FFFFFF' }]}>
         {score}
       </Text>
-      <Text style={[styles.outOf, { fontSize: size * 0.12, color: 'rgba(255,255,255,0.7)' }]}>/10</Text>
+      <Text style={[styles.outOf, { fontSize: size * 0.12, color: 'rgba(255,255,255,0.55)' }]}>/10</Text>
     </View>
   );
 }
@@ -126,12 +126,13 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   scoreText: {
-    fontWeight: '800',
+    fontFamily: 'CormorantGaramond_600SemiBold',
     color: '#FFFFFF',
     textAlign: 'center',
+    lineHeight: undefined,
   },
   outOf: {
-    color: 'rgba(255,255,255,0.7)',
-    fontWeight: '500',
+    fontFamily: 'DMSans_500Medium',
+    color: 'rgba(255,255,255,0.55)',
   },
 });

@@ -76,7 +76,6 @@ export async function getOutfits(): Promise<Outfit[]> {
   const raw = await AsyncStorage.getItem(KEYS.outfits);
   const cached: Outfit[] = raw ? JSON.parse(raw) : [];
 
-  // Background refresh from Supabase
   supabase.auth.getUser().then(({ data }) => {
     if (!data.user) return;
     supabase
@@ -95,7 +94,8 @@ export async function getOutfits(): Promise<Outfit[]> {
           weekKey: r.week_key,
           wornDate: r.worn_date ?? undefined,
         }));
-
+        // Re-read current local state to pick up any outfits saved after this
+        // function was called (avoids race with saveOutfit)
         const currentRaw = await AsyncStorage.getItem(KEYS.outfits);
         const current: Outfit[] = currentRaw ? JSON.parse(currentRaw) : [];
         const remoteIds = new Set(remote.map(o => o.id));
@@ -111,7 +111,8 @@ export async function getOutfits(): Promise<Outfit[]> {
 }
 
 export async function deleteOutfit(id: string): Promise<void> {
-  const existing = await getOutfits();
+  const raw = await AsyncStorage.getItem(KEYS.outfits);
+  const existing: Outfit[] = raw ? JSON.parse(raw) : [];
   const updated = existing.filter(o => o.id !== id);
   await AsyncStorage.setItem(KEYS.outfits, JSON.stringify(updated));
 

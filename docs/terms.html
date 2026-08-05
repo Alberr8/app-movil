@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Términos de Servicio — Sportstyle</title>
+<style>
+  :root {
+    --bg: #f6f7f3;
+    --card: #ffffff;
+    --text: #16161a;
+    --text-secondary: #56565f;
+    --accent: #87ab00;
+    --border: rgba(0,0,0,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16161a;
+      --card: #1f1f24;
+      --text: #f4f4f5;
+      --text-secondary: #9a9aa2;
+      --accent: #d4ff3f;
+      --border: rgba(255,255,255,0.1);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .brand { font-weight: 700; font-size: 1.1rem; }
+  .lang-toggle {
+    display: flex;
+    gap: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px;
+  }
+  .lang-toggle button {
+    border: none;
+    background: transparent;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-secondary);
+  }
+  .lang-toggle button.active { background: var(--accent); color: #16161a; }
+  h1 { font-size: 1.6rem; margin-bottom: 4px; }
+  .updated { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 32px; }
+  h2 {
+    font-size: 1.05rem;
+    margin-top: 36px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  p, li { color: var(--text); font-size: 0.95rem; }
+  ul { padding-left: 20px; }
+  a { color: var(--accent); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.9rem;
+  }
+  [data-lang="en"] { display: none; }
+  body.lang-en [data-lang="es"] { display: none; }
+  body.lang-en [data-lang="en"] { display: block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">Sportstyle</div>
+    <div class="lang-toggle">
+      <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+
+  <div data-lang="es">
+    <h1>Términos de Servicio</h1>
+    <p class="updated">Última actualización: 27 de julio de 2026</p>
+
+    <p>Estos Términos de Servicio ("Términos") regulan el uso de la aplicación móvil <strong>Sportstyle</strong> ("la App"), desarrollada por Alberto Riesgo ("nosotros"). Al crear una cuenta o usar la App, aceptas estos Términos en su totalidad.</p>
+
+    <div class="card">
+      <strong>Responsable:</strong> Alberto Riesgo<br>
+      <strong>Contacto:</strong> <a href="mailto:alberto.riesgo.ar@gmail.com">alberto.riesgo.ar@gmail.com</a>
+    </div>
+
+    <h2>1. Descripción del servicio</h2>
+    <p>Sportstyle permite fotografiar tu outfit deportivo y recibir una puntuación generada mediante inteligencia artificial, junto con recomendaciones de prendas y accesorios. La App incluye además un armario virtual, un reto semanal y estadísticas de progreso.</p>
+
+    <h2>2. La puntuación es orientativa, no un consejo profesional</h2>
+    <p>Las puntuaciones, desgloses y recomendaciones se generan mediante un modelo de inteligencia artificial y tienen carácter puramente orientativo y de entretenimiento. No constituyen asesoramiento profesional de estilismo, moda o rendimiento deportivo, y pueden contener imprecisiones propias de cualquier sistema de IA. No garantizamos que los resultados sean exactos, consistentes o adecuados para un fin concreto.</p>
+
+    <h2>3. Cuentas de usuario</h2>
+    <ul>
+      <li>Debes tener al menos 16 años para crear una cuenta.</li>
+      <li>Eres responsable de mantener la confidencialidad de tu contraseña y de toda actividad realizada desde tu cuenta.</li>
+      <li>Debes proporcionar información veraz al registrarte.</li>
+    </ul>
+
+    <h2>4. Contenido que subes</h2>
+    <p>Mantienes la propiedad de las fotografías que subes a la App. Al subir una foto, nos concedes una licencia limitada, no exclusiva y revocable para procesarla únicamente con el fin de generar tu puntuación, tal como se describe en la <a href="privacy-policy.html">Política de Privacidad</a>. No debes subir fotografías de terceros sin su consentimiento, ni contenido ilegal, ofensivo o que infrinja derechos de propiedad intelectual.</p>
+
+    <h2>5. Uso aceptable</h2>
+    <p>No debes: (a) intentar acceder a cuentas de otros usuarios; (b) realizar ingeniería inversa de la App o de los servicios de IA subyacentes; (c) usar la App con fines fraudulentos o para sobrecargar deliberadamente el servicio de análisis; (d) utilizar la App si eres menor de la edad mínima indicada.</p>
+
+    <h2>6. Compras y funciones premium</h2>
+    <p>La App puede incluir funciones desbloqueables mediante el cumplimiento de retos o, en el futuro, mediante compras dentro de la aplicación gestionadas a través de App Store o Google Play. Cuando existan compras, se regirán por las condiciones de facturación, renovación y reembolso de la tienda correspondiente (Apple o Google), no por nosotros directamente.</p>
+
+    <h2>7. Propiedad intelectual</h2>
+    <p>El diseño, marca, código y contenidos propios de Sportstyle (excluyendo tus fotografías) son propiedad de Alberto Riesgo. No se concede ningún derecho sobre ellos salvo el uso normal de la App conforme a estos Términos.</p>
+
+    <h2>8. Disponibilidad del servicio</h2>
+    <p>Nos apoyamos en proveedores externos (infraestructura de base de datos y modelos de inteligencia artificial) para operar la App. No garantizamos disponibilidad ininterrumpida y podemos suspender o modificar funciones por mantenimiento, causas ajenas a nosotros, o decisiones de dichos proveedores.</p>
+
+    <h2>9. Limitación de responsabilidad</h2>
+    <p>En la medida permitida por la ley, no seremos responsables de daños indirectos, pérdida de datos, o decisiones tomadas por el usuario basándose en las recomendaciones de la App. El servicio se presta "tal cual", sin garantías de ningún tipo.</p>
+
+    <h2>10. Suspensión y terminación</h2>
+    <p>Podemos suspender o cancelar tu cuenta si incumples estos Términos. Puedes eliminar tu cuenta en cualquier momento escribiéndonos al contacto indicado.</p>
+
+    <h2>11. Ley aplicable</h2>
+    <p>Estos Términos se rigen por la legislación española. Para cualquier controversia, las partes se someterán a los juzgados y tribunales que correspondan según la normativa de protección a personas consumidoras aplicable.</p>
+
+    <h2>12. Modificaciones</h2>
+    <p>Podemos actualizar estos Términos ocasionalmente. Te notificaremos de cambios relevantes a través de la App o de esta misma página.</p>
+
+    <h2>13. Contacto</h2>
+    <p><a href="mailto:alberto.riesgo.ar@gmail.com">alberto.riesgo.ar@gmail.com</a></p>
+  </div>
+
+  <div data-lang="en">
+    <h1>Terms of Service</h1>
+    <p class="updated">Last updated: July 27, 2026</p>
+
+    <p>These Terms of Service ("Terms") govern your use of the <strong>Sportstyle</strong> mobile app ("the App"), developed by Alberto Riesgo ("we"). By creating an account or using the App, you accept these Terms in full.</p>
+
+    <div class="card">
+      <strong>Developer:</strong> Alberto Riesgo<br>
+      <strong>Contact:</strong> <a href="mailto:alberto.riesgo.ar@gmail.com">alberto.riesgo.ar@gmail.com</a>
+    </div>
+
+    <h2>1. Service description</h2>
+    <p>Sportstyle lets you photograph your sports outfit and receive an AI-generated score, along with clothing and accessory recommendations. The App also includes a virtual wardrobe, a weekly challenge, and progress statistics.</p>
+
+    <h2>2. The score is indicative, not professional advice</h2>
+    <p>Scores, breakdowns, and recommendations are generated by an AI model and are purely indicative and for entertainment purposes. They do not constitute professional styling, fashion, or athletic performance advice, and may contain inaccuracies inherent to any AI system. We do not guarantee that results are accurate, consistent, or fit for any particular purpose.</p>
+
+    <h2>3. User accounts</h2>
+    <ul>
+      <li>You must be at least 16 years old to create an account.</li>
+      <li>You are responsible for keeping your password confidential and for all activity under your account.</li>
+      <li>You must provide truthful information when registering.</li>
+    </ul>
+
+    <h2>4. Content you upload</h2>
+    <p>You retain ownership of the photos you upload to the App. By uploading a photo, you grant us a limited, non-exclusive, revocable license to process it solely to generate your score, as described in the <a href="privacy-policy.html">Privacy Policy</a>. You must not upload photos of other people without their consent, or content that is illegal, offensive, or infringes intellectual property rights.</p>
+
+    <h2>5. Acceptable use</h2>
+    <p>You must not: (a) attempt to access other users' accounts; (b) reverse-engineer the App or the underlying AI services; (c) use the App for fraudulent purposes or to deliberately overload the analysis service; (d) use the App if you are under the minimum age stated above.</p>
+
+    <h2>6. Purchases and premium features</h2>
+    <p>The App may include features unlocked by completing challenges or, in the future, through in-app purchases processed via the App Store or Google Play. Where purchases exist, they are governed by the billing, renewal, and refund terms of the relevant store (Apple or Google), not by us directly.</p>
+
+    <h2>7. Intellectual property</h2>
+    <p>Sportstyle's design, brand, code, and proprietary content (excluding your photos) are owned by Alberto Riesgo. No rights are granted over them beyond normal use of the App under these Terms.</p>
+
+    <h2>8. Service availability</h2>
+    <p>We rely on external providers (database infrastructure and AI models) to operate the App. We do not guarantee uninterrupted availability and may suspend or modify features due to maintenance, causes beyond our control, or decisions made by those providers.</p>
+
+    <h2>9. Limitation of liability</h2>
+    <p>To the extent permitted by law, we are not liable for indirect damages, data loss, or decisions made by you based on the App's recommendations. The service is provided "as is", without warranties of any kind.</p>
+
+    <h2>10. Suspension and termination</h2>
+    <p>We may suspend or cancel your account if you breach these Terms. You may delete your account at any time by contacting us at the email above.</p>
+
+    <h2>11. Governing law</h2>
+    <p>These Terms are governed by Spanish law. Any dispute will be submitted to the courts applicable under relevant consumer protection regulations.</p>
+
+    <h2>12. Changes</h2>
+    <p>We may update these Terms occasionally. We will notify you of relevant changes through the App or on this same page.</p>
+
+    <h2>13. Contact</h2>
+    <p><a href="mailto:alberto.riesgo.ar@gmail.com">alberto.riesgo.ar@gmail.com</a></p>
+  </div>
+
+  <p style="margin-top:48px;"><a href="privacy-policy.html" data-lang="es">← Ver Política de Privacidad</a><a href="privacy-policy.html" data-lang="en">← View Privacy Policy</a></p>
+</div>
+
+<script>
+  function setLang(lang) {
+    document.body.classList.toggle('lang-en', lang === 'en');
+    document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    localStorage.setItem('sportstyle-legal-lang', lang);
+  }
+  var saved = localStorage.getItem('sportstyle-legal-lang');
+  if (saved) setLang(saved);
+</script>
+</body>
+</html>

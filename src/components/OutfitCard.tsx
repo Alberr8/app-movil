@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   badgeText: {
-    fontFamily: 'Inter_800ExtraBold',
+    fontFamily: 'CormorantGaramond_600SemiBold',
     fontSize: 13,
     color: '#000000',
   },
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   date: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 11,
     color: colors.textSecondary,
   },

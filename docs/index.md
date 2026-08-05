@@ -6,7 +6,7 @@ title: Sportstyle
 
 App móvil para puntuar y mejorar tus outfits deportivos. Analiza tu look según el deporte elegido y recibe recomendaciones de prendas y accesorios.
 
-[Ver el código en GitHub](https://github.com/Alberr8/app-movil)
+[Ver el código en GitHub](https://github.com/Alberr8/app-movil) · [Política de Privacidad](privacy-policy.html) · [Términos de Servicio](terms.html)
 
 ## Estado actual
 

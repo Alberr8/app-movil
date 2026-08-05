@@ -9,12 +9,19 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 import { Ionicons } from '@expo/vector-icons';
 import {
   useFonts,
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-  Inter_800ExtraBold,
-} from '@expo-google-fonts/inter';
+  DMSans_400Regular,
+  DMSans_500Medium,
+  DMSans_600SemiBold,
+  DMSans_700Bold,
+} from '@expo-google-fonts/dm-sans';
+import {
+  CormorantGaramond_400Regular,
+  CormorantGaramond_500Medium,
+  CormorantGaramond_600SemiBold,
+  CormorantGaramond_700Bold,
+  CormorantGaramond_500Medium_Italic,
+  CormorantGaramond_600SemiBold_Italic,
+} from '@expo-google-fonts/cormorant-garamond';
 import * as SplashScreen from 'expo-splash-screen';
 import type { Session } from '@supabase/supabase-js';
 
@@ -28,7 +35,7 @@ import AuthScreen     from './src/screens/AuthScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 
 import { RootStackParamList, TabParamList } from './src/types';
-import { colors, palette, radius, shadow } from './src/constants/theme';
+import { colors, shadow } from './src/constants/theme';
 import { scheduleDailyReminder, requestNotificationPermission } from './src/services/notifications';
 import { getLanguage, getNotificationsEnabled, onLanguageChange } from './src/services/storage';
 import { supabase } from './src/services/supabase';
@@ -44,22 +51,22 @@ type TabName = keyof TabParamList;
 type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
 
 const TAB_ICONS: Record<TabName, { active: IoniconName; inactive: IoniconName }> = {
-  Wardrobe: { active: 'shirt',        inactive: 'shirt-outline'   },
-  Profile:  { active: 'person',       inactive: 'person-outline'  },
-  Camera:   { active: 'camera',       inactive: 'camera-outline'  },
-  Premium:  { active: 'star',         inactive: 'star-outline'    },
-  Stats:    { active: 'bar-chart',    inactive: 'bar-chart-outline'},
+  Wardrobe: { active: 'grid',       inactive: 'grid-outline'      },
+  Stats:    { active: 'bar-chart',  inactive: 'bar-chart-outline' },
+  Camera:   { active: 'camera',     inactive: 'camera-outline'    },
+  Premium:  { active: 'bag',        inactive: 'bag-outline'       },
+  Profile:  { active: 'person',     inactive: 'person-outline'    },
 };
 
 const TAB_LABELS: Record<string, Record<TabName, string>> = {
-  es: { Camera: 'Cámara', Premium: 'Premium', Wardrobe: 'Armario', Profile: 'Perfil', Stats: 'Stats' },
-  en: { Camera: 'Camera', Premium: 'Premium', Wardrobe: 'Wardrobe', Profile: 'Profile', Stats: 'Stats' },
+  es: { Camera: 'Cámara', Premium: 'Pro', Wardrobe: 'Looks', Profile: 'Perfil', Stats: 'Stats' },
+  en: { Camera: 'Camera', Premium: 'Pro', Wardrobe: 'Looks', Profile: 'Profile', Stats: 'Stats' },
 };
 
-// ─── Camera FAB button (center, elevated) ─────────────────────────────────────
-const CAM_SIZE = 62;
+// ─── Camera FAB ───────────────────────────────────────────────────────────────
+const CAM_SIZE = 60;
 
-// ─── Custom Tab Bar ───────────────────────────────────────────────────────────
+// ─── Custom Tab Bar — floating pill with frosted glass ────────────────────────
 function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   const [lang, setLang] = useState('es');
@@ -71,21 +78,19 @@ function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   }, []);
   const labels = TAB_LABELS[lang] ?? TAB_LABELS['es'];
 
-  // Layout: [Wardrobe, Stats] | [Camera FAB] | [Premium, Profile]
-  const leftNames:   TabName[] = ['Wardrobe', 'Stats'];
-  const rightNames:  TabName[] = ['Premium', 'Profile'];
-  const cameraIndex = state.routes.findIndex(r => r.name === 'Camera');
-  const isCameraFocused = state.index === cameraIndex;
+  const leftNames:  TabName[] = ['Wardrobe', 'Stats'];
+  const rightNames: TabName[] = ['Premium', 'Profile'];
+  const cameraIdx = state.routes.findIndex(r => r.name === 'Camera');
+  const isCamFocused = state.index === cameraIdx;
 
-  const paddingBottom = insets.bottom > 0 ? insets.bottom : (Platform.OS === 'ios' ? 20 : 8);
-  const barHeight = 54 + paddingBottom;
+  // Hide the tab bar on the Camera screen — it's a full-screen experience
+  if (isCamFocused) return null;
 
-  function renderSideTab(name: TabName) {
-    const route = state.routes.find(r => r.name === name);
-    if (!route) return null;
+  const bottomPad = insets.bottom > 0 ? insets.bottom : (Platform.OS === 'ios' ? 20 : 12);
+
+  function renderTab(name: TabName) {
     const focused = state.routes[state.index].name === name;
     const icons = TAB_ICONS[name];
-
     return (
       <TouchableOpacity
         key={name}
@@ -96,7 +101,7 @@ function CustomTabBar({ state, navigation }: BottomTabBarProps) {
         <Ionicons
           name={focused ? icons.active : icons.inactive}
           size={22}
-          color={focused ? '#65c301' : 'rgba(0,0,0,0.35)'}
+          color={focused ? colors.dark : colors.textTertiary}
         />
         <Text style={[tabStyles.label, focused && tabStyles.labelActive]}>
           {labels[name]}
@@ -106,63 +111,70 @@ function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   }
 
   return (
-    <View style={[tabStyles.container, { paddingBottom, height: barHeight + 20 }]}>
-      {/* Left tabs */}
-      <View style={tabStyles.side}>
-        {leftNames.map(renderSideTab)}
-      </View>
+    <View style={[tabStyles.wrapper, { paddingBottom: bottomPad }]} pointerEvents="box-none">
+      <View style={tabStyles.pill}>
+        {/* Left tabs */}
+        <View style={tabStyles.side}>
+          {leftNames.map(renderTab)}
+        </View>
 
-      {/* Camera FAB — elevated above the bar */}
-      <View style={tabStyles.cameraSection}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Camera')}
-          activeOpacity={0.85}
-          style={tabStyles.cameraTouch}
-        >
-          <View style={[tabStyles.cameraRing, isCameraFocused && tabStyles.cameraRingFocused]}>
-            <View style={[tabStyles.cameraCircle, isCameraFocused && tabStyles.cameraCircleFocused]}>
-              <Ionicons
-                name={isCameraFocused ? 'camera' : 'camera-outline'}
-                size={26}
-                color="#000"
-              />
+        {/* Camera FAB — elevated above the pill */}
+        <View style={tabStyles.fabSection}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Camera')}
+            activeOpacity={0.85}
+            style={tabStyles.fabTouch}
+          >
+            <View style={[tabStyles.fabRing, isCamFocused && tabStyles.fabRingFocused]}>
+              <View style={[tabStyles.fabCircle, isCamFocused && tabStyles.fabCircleFocused]}>
+                <Ionicons
+                  name={isCamFocused ? 'camera' : 'camera-outline'}
+                  size={26}
+                  color={isCamFocused ? colors.onAccent : '#fff'}
+                />
+              </View>
             </View>
-          </View>
-          <Text style={[tabStyles.label, isCameraFocused && tabStyles.labelActive, { marginTop: 2 }]}>
-            {labels['Camera']}
-          </Text>
-        </TouchableOpacity>
-      </View>
+          </TouchableOpacity>
+        </View>
 
-      {/* Right tabs */}
-      <View style={tabStyles.side}>
-        {rightNames.map(renderSideTab)}
+        {/* Right tabs */}
+        <View style={tabStyles.side}>
+          {rightNames.map(renderTab)}
+        </View>
       </View>
     </View>
   );
 }
 
 const tabStyles = StyleSheet.create({
-  container: {
+  wrapper: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 14,
+    backgroundColor: 'transparent',
+  },
+  pill: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    backgroundColor: colors.card,
-    borderTopWidth: 0.5,
-    borderTopColor: 'rgba(0,0,0,0.07)',
-    // shadow on the bar
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 10,
+    alignItems: 'center',
+    height: 64,
+    backgroundColor: 'rgba(255,255,255,0.90)',
+    borderRadius: 26,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.72)',
+    shadowColor: '#0d0d10',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.14,
+    shadowRadius: 30,
+    elevation: 14,
     overflow: 'visible',
   },
   side: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    alignItems: 'flex-end',
-    paddingBottom: 4,
+    alignItems: 'center',
   },
   tab: {
     flex: 1,
@@ -171,52 +183,49 @@ const tabStyles = StyleSheet.create({
     paddingVertical: 6,
   },
   label: {
-    fontFamily: 'Inter_500Medium',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 10,
-    color: 'rgba(0,0,0,0.35)',
+    color: colors.textTertiary,
     letterSpacing: 0.2,
   },
-  labelActive: { color: '#65c301' },
+  labelActive: { color: colors.dark },
 
   // Camera FAB
-  cameraSection: {
+  fabSection: {
     width: CAM_SIZE + 24,
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingBottom: 2,
+    justifyContent: 'center',
   },
-  cameraTouch: {
+  fabTouch: {
     alignItems: 'center',
-    marginBottom: 2,
+    justifyContent: 'center',
+    marginTop: -28,
   },
-  cameraRing: {
+  fabRing: {
     width: CAM_SIZE + 8,
     height: CAM_SIZE + 8,
     borderRadius: (CAM_SIZE + 8) / 2,
-    backgroundColor: colors.card,
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
-    // lifts above the bar line
-    marginBottom: -4,
-    transform: [{ translateY: -18 }],
     ...shadow.md,
   },
-  cameraRingFocused: {
-    shadowColor: palette.lime[300],
-    shadowOpacity: 0.45,
-    shadowRadius: 16,
-    elevation: 14,
+  fabRingFocused: {
+    shadowColor: colors.accent,
+    shadowOpacity: 0.5,
+    shadowRadius: 20,
+    elevation: 16,
   },
-  cameraCircle: {
+  fabCircle: {
     width: CAM_SIZE,
     height: CAM_SIZE,
     borderRadius: CAM_SIZE / 2,
-    backgroundColor: 'rgba(181,253,89,0.55)',
+    backgroundColor: colors.dark,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  cameraCircleFocused: {
-    backgroundColor: palette.lime[300],
+  fabCircleFocused: {
+    backgroundColor: colors.accent,
   },
 });
 
@@ -239,11 +248,16 @@ function TabNavigator() {
 // ─── Root App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
-    Inter_800ExtraBold,
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_600SemiBold,
+    DMSans_700Bold,
+    CormorantGaramond_400Regular,
+    CormorantGaramond_500Medium,
+    CormorantGaramond_600SemiBold,
+    CormorantGaramond_700Bold,
+    CormorantGaramond_500Medium_Italic,
+    CormorantGaramond_600SemiBold_Italic,
   });
 
   const [session, setSession]               = useState<Session | null | undefined>(undefined);

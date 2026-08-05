@@ -105,13 +105,13 @@ const styles = StyleSheet.create({
   header: { alignItems: 'center', marginBottom: spacing.xl },
   logo: {
     fontSize: 36,
-    fontFamily: 'Inter_800ExtraBold',
+    fontFamily: 'CormorantGaramond_600SemiBold',
     color: colors.textPrimary,
     letterSpacing: 0.5,
   },
   subtitle: {
     fontSize: 15,
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     color: colors.textSecondary,
     marginTop: spacing.xs,
   },
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     ...shadow.md,
   },
   label: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 13,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: 12,
     fontSize: 15,
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     color: colors.textPrimary,
     marginBottom: spacing.xs,
   },
@@ -149,14 +149,14 @@ const styles = StyleSheet.create({
   },
   btnDisabled: { opacity: 0.5 },
   btnText: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 16,
     color: '#000',
   },
 
   toggle: {
     textAlign: 'center',
-    fontFamily: 'Inter_500Medium',
+    fontFamily: 'DMSans_500Medium',
     fontSize: 14,
     color: colors.textSecondary,
   },

@@ -43,12 +43,12 @@ const styles = StyleSheet.create({
   },
   left: { flex: 1 },
   title: {
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'DMSans_600SemiBold',
     fontSize: 15,
     color: colors.textPrimary,
   },
   subtitle: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'DMSans_400Regular',
     fontSize: 12,
     color: colors.textSecondary,
     marginTop: 3,
