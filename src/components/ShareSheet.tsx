@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Share, Linking, Platform } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { spacing, radius } from '../constants/theme';
+import { spacing } from '../constants/theme';
 import { Language } from '../types';
 import { t } from '../constants/i18n';
 

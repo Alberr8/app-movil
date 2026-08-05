@@ -1,3 +1,5 @@
+import type { NavigatorScreenParams } from '@react-navigation/native';
+
 export type ExerciseType =
   | 'running'
   | 'cycling'
@@ -68,8 +70,6 @@ export interface UserProfile {
   language: Language;
   notifications_enabled: boolean;
 }
-
-import type { NavigatorScreenParams } from '@react-navigation/native';
 
 export type RootStackParamList = {
   Auth: undefined;

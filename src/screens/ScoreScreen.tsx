@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, Image, ScrollView, TouchableOpacity,
-  SafeAreaView, Animated, Platform, Linking, FlatList,
+  SafeAreaView, Animated, Platform, Linking,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
@@ -11,11 +11,11 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, spacing, radius, shadow } from '../constants/theme';
 import { t } from '../constants/i18n';
 import { RootStackParamList, Language, Outfit, ProductRecommendation } from '../types';
-
-type Nav = NativeStackNavigationProp<RootStackParamList, 'Score'>;
 import { getLanguage, saveOutfit, getWeekKey } from '../services/storage';
 import ScoreRing from '../components/ScoreRing';
 import ShareSheet from '../components/ShareSheet';
+
+type Nav = NativeStackNavigationProp<RootStackParamList, 'Score'>;
 
 type Route = RouteProp<RootStackParamList, 'Score'>;
 
@@ -79,13 +79,15 @@ export default function ScoreScreen() {
   const [saved, setSaved] = useState(false);
   const [wornDate, setWornDate] = useState(localISODate(0));
   const [toast, setToast] = useState<string | null>(null);
-  const toastAnim = useRef(new Animated.Value(0)).current;
-  const barAnims = useRef(BREAKDOWN_FIELDS.map(() => new Animated.Value(0))).current;
+  const [toastAnim] = useState(() => new Animated.Value(0));
+  const [barAnims] = useState(() => BREAKDOWN_FIELDS.map(() => new Animated.Value(0)));
 
   useEffect(() => {
     getLanguage().then(setLang);
   }, []);
 
+  // Runs once on mount to animate in the initial breakdown — barAnims/result.breakdown
+  // are intentionally excluded, re-running this on every score change isn't wanted here.
   useEffect(() => {
     Animated.stagger(
       80,
@@ -98,6 +100,7 @@ export default function ScoreScreen() {
         }),
       ),
     ).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function showToast(msg: string) {

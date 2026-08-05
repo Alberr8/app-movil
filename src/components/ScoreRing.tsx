@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, View, Text, StyleSheet, Platform } from 'react-native';
-import { colors, typography } from '../constants/theme';
+import { colors } from '../constants/theme';
 
 interface Props {
   score: number;
@@ -14,14 +14,14 @@ function getScoreColor(score: number): string {
 }
 
 export default function ScoreRing({ score, size = 160 }: Props) {
-  const animatedValue = useRef(new Animated.Value(0)).current;
-  const displayScore = useRef(new Animated.Value(0)).current;
+  const [animatedValue] = useState(() => new Animated.Value(0));
+  const [displayScore] = useState(() => new Animated.Value(0));
 
   const strokeWidth = size * 0.075;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
   const scoreColor = getScoreColor(score);
 
+  // animatedValue/displayScore are stable (from useState's lazy initializer) — only
+  // re-run when the score itself changes.
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: score / 10,
@@ -34,6 +34,7 @@ export default function ScoreRing({ score, size = 160 }: Props) {
       duration: 1400,
       useNativeDriver: false,
     }).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [score]);
 
   // On web, use a simple animated circle via CSS-style approach

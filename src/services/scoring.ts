@@ -19,7 +19,7 @@ function getSportCategory(sport: ExerciseType): SportCategory {
 }
 
 // ─── Product pool per category ────────────────────────────────────────────────
-const PRODUCTS: Record<SportCategory, Array<{ name: string; brand: string; reason: Record<Language, string>; url: string; type: 'replace' | 'add' }>> = {
+const PRODUCTS: Record<SportCategory, { name: string; brand: string; reason: Record<Language, string>; url: string; type: 'replace' | 'add' }[]> = {
   endurance: [
     {
       name: 'Air Zoom Pegasus 41',
