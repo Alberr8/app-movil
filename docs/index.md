@@ -23,6 +23,7 @@ Arreglos recientes:
 - ✅ Migración `worn_date` aplicada en el Supabase real — verificado consultando la tabla `outfits` directamente: los outfits guardados ya sincronizan de verdad con el backend, no solo en local.
 - Los nombres de la barra de tabs inferior ahora cambian al instante al cambiar idioma en Perfil — antes se quedaban congelados porque la barra solo leía el idioma una vez, al arrancar la app.
 - ⚠️ **Pendiente, a propósito**: el scoring por IA real (`score-outfit`, `weekly-coaching`) necesita el secreto `ANTHROPIC_API_KEY` en Supabase — hasta que se dé de alta esa API, la app sigue funcionando bien con el fallback de puntuación local aleatoria.
+- ✅ Se añadió ESLint (`npm run lint`) — encontró 18 problemas reales en la primera pasada, incluidos 6 errores por leer `.current` de un ref durante el render (`ScoreRing.tsx`, `ScoreScreen.tsx`). Todo corregido, el linter pasa limpio.
 
 ## Camino a las tiendas (App Store / Play Store)
 

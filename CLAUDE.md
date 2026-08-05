@@ -39,9 +39,14 @@ npx expo start --ios      # macOS only
 
 # Type-check without building
 npx tsc --noEmit
+
+# Lint (ESLint via expo lint, flat config in eslint.config.js)
+npm run lint
 ```
 
-No test runner or linter is configured.
+No test runner is configured. Linting is (`npm run lint` / `npx expo lint`) — keep it passing clean;
+it already caught real bugs once (reading `.current` off a ref during render in ScoreRing.tsx /
+ScoreScreen.tsx).
 
 ## EAS Build
 

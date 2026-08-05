@@ -24,7 +24,8 @@ App móvil para puntuar y mejorar tus outfits deportivos. Analiza tu look según
 - Supabase — Auth, Postgres (preferencias de sports/brands) y Edge Functions
 - AsyncStorage para persistencia y cache local
 - expo-camera, expo-image-picker, expo-notifications, expo-haptics, expo-linear-gradient, expo-blur
-- @expo-google-fonts/inter
+- @expo-google-fonts/dm-sans, @expo-google-fonts/cormorant-garamond
+- ESLint (`npm run lint`, flat config via `expo lint`)
 
 ## Desarrollo
 
@@ -43,6 +44,9 @@ npx expo start --tunnel
 
 # Verificar tipos
 npx tsc --noEmit
+
+# Lint
+npm run lint
 ```
 
 Escanea el QR con la app [Expo Go](https://expo.dev/go) en tu móvil.
@@ -83,4 +87,4 @@ con la pantalla `Main` ya registrada.
   Supabase y conexión a internet; el resto de la app (outfits guardados, stats, idioma,
   notificaciones) funciona offline.
 - `StatsScreen` es la más reciente y aún básica: 4 KPIs sin gráfico de tendencia.
-- No hay test runner ni linter configurado todavía.
+- No hay test runner configurado todavía. Sí hay linter (ESLint, `npm run lint`) y pasa limpio.
