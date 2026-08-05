@@ -24,6 +24,14 @@ Arreglos recientes:
 - Los nombres de la barra de tabs inferior ahora cambian al instante al cambiar idioma en Perfil — antes se quedaban congelados porque la barra solo leía el idioma una vez, al arrancar la app.
 - ⚠️ **Pendiente, a propósito**: el scoring por IA real (`score-outfit`, `weekly-coaching`) necesita el secreto `ANTHROPIC_API_KEY` en Supabase — hasta que se dé de alta esa API, la app sigue funcionando bien con el fallback de puntuación local aleatoria.
 
+## Camino a las tiendas (App Store / Play Store)
+
+- ✅ Bundle identifiers (`com.albertoriesgo.sportstyle`) y `eas.json` con perfiles de build.
+- ✅ Política de privacidad y términos de servicio.
+- ✅ Textos de permisos de cámara/galería configurados (`expo-camera`, `expo-image-picker`) — antes faltaban y Apple habría rechazado la app directamente.
+- ⬜ Generar el primer build real (`eas login` + `eas build`) — necesita tu cuenta de Expo, no se puede hacer sin tus credenciales.
+- ⬜ Metadata de tienda: capturas, descripción, clasificación de edad.
+
 ## Características
 
 - Cuenta de usuario (registro/login con Supabase Auth) y onboarding inicial: tagline, selección de deportes favoritos y marcas favoritas

@@ -28,7 +28,24 @@
     "plugins": [
       "expo-sharing",
       "expo-font",
-      "expo-splash-screen"
+      "expo-splash-screen",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Sportstyle necesita acceso a la cámara para fotografiar tu outfit deportivo y puntuarlo.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Sportstyle necesita acceso a tus fotos para que puedas subir una imagen de tu outfit deportivo.",
+          "cameraPermission": "Sportstyle necesita acceso a la cámara para fotografiar tu outfit deportivo y puntuarlo.",
+          "microphonePermission": false
+        }
+      ]
     ]
   }
 }
