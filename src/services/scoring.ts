@@ -245,7 +245,7 @@ const PRODUCTS: Record<SportCategory, { name: string; brand: string; reason: Rec
 };
 
 // ─── Score logic ──────────────────────────────────────────────────────────────
-function weightedRandom(): number {
+export function weightedRandom(): number {
   const weights = [5, 15, 30, 30, 15, 5];
   const total = weights.reduce((a, b) => a + b, 0);
   let r = Math.random() * total;
@@ -256,7 +256,7 @@ function weightedRandom(): number {
   return 7;
 }
 
-function distributeScore(total: number): ScoreBreakdown {
+export function distributeScore(total: number): ScoreBreakdown {
   const values = [0, 0, 0, 0, 0];
   let remaining = total;
   for (let i = 0; i < 5; i++) {

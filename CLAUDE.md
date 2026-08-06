@@ -42,11 +42,20 @@ npx tsc --noEmit
 
 # Lint (ESLint via expo lint, flat config in eslint.config.js)
 npm run lint
+
+# Unit tests (jest-expo preset, config lives in package.json "jest" key)
+npm test
 ```
 
-No test runner is configured. Linting is (`npm run lint` / `npx expo lint`) — keep it passing clean;
-it already caught real bugs once (reading `.current` off a ref during render in ScoreRing.tsx /
-ScoreScreen.tsx).
+Linting (`npm run lint` / `npx expo lint`) — keep it passing clean; it already caught real bugs
+once (reading `.current` off a ref during render in ScoreRing.tsx / ScoreScreen.tsx).
+
+Unit tests only cover pure logic so far: `getWeekKey`/`getWeekEnd` (storage.ts), `distributeScore`/
+`weightedRandom` (scoring.ts), and ES/EN key parity in i18n.ts. No component/screen tests yet.
+AsyncStorage is mocked via `jest.setup.js` (`jest.mock(...)` wrapping the official
+`@react-native-async-storage/async-storage/jest/async-storage-mock` — just pointing `setupFiles` at
+the mock path directly does NOT work, since it needs to be registered through `jest.mock`, not run
+as a plain script).
 
 ## EAS Build
 

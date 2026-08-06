@@ -43,7 +43,7 @@ export function getSportLabel(key: ExerciseType, lang: Language): string {
 }
 
 // ─── UI strings ──────────────────────────────────────────────────────────────
-const strings = {
+export const strings = {
   es: {
     tabHome: 'Inicio',
     tabPremium: 'Premium',
