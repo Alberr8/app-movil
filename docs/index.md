@@ -24,6 +24,7 @@ Arreglos recientes:
 - Los nombres de la barra de tabs inferior ahora cambian al instante al cambiar idioma en Perfil — antes se quedaban congelados porque la barra solo leía el idioma una vez, al arrancar la app.
 - ⚠️ **Pendiente, a propósito**: el scoring por IA real (`score-outfit`, `weekly-coaching`) necesita el secreto `ANTHROPIC_API_KEY` en Supabase — hasta que se dé de alta esa API, la app sigue funcionando bien con el fallback de puntuación local aleatoria.
 - ✅ Se añadió ESLint (`npm run lint`) — encontró 18 problemas reales en la primera pasada, incluidos 6 errores por leer `.current` de un ref durante el render (`ScoreRing.tsx`, `ScoreScreen.tsx`). Todo corregido, el linter pasa limpio.
+- 🧹 Limpieza de duplicación de código: el formato de fecha local `YYYY-MM-DD` estaba triplicado (dos copias idénticas en `WardrobeScreen.tsx` y una tercera en `ScoreScreen.tsx`) — ahora vive en `src/utils/date.ts` (`toLocalISODate`). El umbral score→color (verde/ámbar/rojo) estaba triplicado en `ScoreRing.tsx`, `OutfitCard.tsx` y `ScoreScreen.tsx` — ahora `ScoreRing.tsx` exporta `getScoreColor()` y los otros dos lo importan. Sin cambios de comportamiento.
 
 ## Camino a las tiendas (App Store / Play Store)
 

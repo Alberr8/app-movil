@@ -10,6 +10,7 @@ import { colors, spacing, radius, shadow } from '../constants/theme';
 import { t } from '../constants/i18n';
 import { ExerciseType, Language, Outfit } from '../types';
 import { getLanguage, getOutfits } from '../services/storage';
+import { toLocalISODate } from '../utils/date';
 import OutfitCard from '../components/OutfitCard';
 
 const { width } = Dimensions.get('window');
@@ -20,15 +21,6 @@ const SEL    = 30;  // selection circle diameter
 type Filter = 'all' | ExerciseType;
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
-function todayISO(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
-function isoFromDate(d: Date): string {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
 function outfitDate(o: Outfit): string {
   return o.wornDate ?? o.createdAt.slice(0, 10);
 }
@@ -41,7 +33,7 @@ function generateCalendarDays(month: Date): (string | null)[] {
   const daysInMonth = new Date(year, m + 1, 0).getDate();
   const cells: (string | null)[] = [];
   for (let i = 0; i < startDow; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(isoFromDate(new Date(year, m, d)));
+  for (let d = 1; d <= daysInMonth; d++) cells.push(toLocalISODate(new Date(year, m, d)));
   // Pad to full weeks so every row has exactly 7 cells
   while (cells.length % 7 !== 0) cells.push(null);
   return cells;
@@ -73,7 +65,7 @@ function MiniCalendar({ month, outfitDates, selectedDate, lang, onSelectDate, on
   const days = generateCalendarDays(month);
   const DOW = lang === 'es' ? DOW_ES : DOW_EN;
   const title = `${lang === 'es' ? MONTHS_ES[month.getMonth()] : MONTHS_EN[month.getMonth()]} ${month.getFullYear()}`;
-  const today = todayISO();
+  const today = toLocalISODate(new Date());
 
   return (
     <View style={calStyles.container}>

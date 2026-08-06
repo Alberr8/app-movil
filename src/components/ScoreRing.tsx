@@ -7,7 +7,7 @@ interface Props {
   size?: number;
 }
 
-function getScoreColor(score: number): string {
+export function getScoreColor(score: number): string {
   if (score >= 8) return colors.scoreHigh;
   if (score >= 5) return colors.scoreMid;
   return colors.scoreLow;

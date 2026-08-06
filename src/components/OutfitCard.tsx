@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, radius, shadow } from '../constants/theme';
 import { Outfit, Language } from '../types';
 import { SPORTS } from '../constants/i18n';
+import { getScoreColor } from './ScoreRing';
 
 interface Props {
   outfit: Outfit;
@@ -12,9 +13,8 @@ interface Props {
 }
 
 function ScoreBadge({ score }: { score: number }) {
-  const bg = score >= 8 ? colors.scoreHigh : score >= 5 ? colors.scoreMid : colors.scoreLow;
   return (
-    <View style={[styles.badge, { backgroundColor: bg }]}>
+    <View style={[styles.badge, { backgroundColor: getScoreColor(score) }]}>
       <Text style={styles.badgeText}>{score}</Text>
     </View>
   );

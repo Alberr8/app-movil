@@ -12,7 +12,8 @@ import { colors, spacing, radius, shadow } from '../constants/theme';
 import { t } from '../constants/i18n';
 import { RootStackParamList, Language, Outfit, ProductRecommendation } from '../types';
 import { getLanguage, saveOutfit, getWeekKey } from '../services/storage';
-import ScoreRing from '../components/ScoreRing';
+import { toLocalISODate } from '../utils/date';
+import ScoreRing, { getScoreColor } from '../components/ScoreRing';
 import ShareSheet from '../components/ShareSheet';
 
 type Nav = NativeStackNavigationProp<RootStackParamList, 'Score'>;
@@ -56,7 +57,7 @@ function ProductCard({ product, lang }: { product: ProductRecommendation; lang: 
 function localISODate(daysBack = 0): string {
   const d = new Date();
   d.setDate(d.getDate() - daysBack);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  return toLocalISODate(d);
 }
 
 function formatDateChip(iso: string, lang: Language): string {
@@ -138,7 +139,7 @@ export default function ScoreScreen() {
     setTimeout(() => nav.navigate('Main', { screen: 'Wardrobe' }), 1200);
   }
 
-  const scoreColor = result.total >= 8 ? colors.scoreHigh : result.total >= 5 ? colors.scoreMid : colors.scoreLow;
+  const scoreColor = getScoreColor(result.total);
 
   return (
     <View style={styles.root}>
